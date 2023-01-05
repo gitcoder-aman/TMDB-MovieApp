@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_nav"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/bottom_nav"
+        android:background="@color/black"
+        app:menu="@menu/nav_item"
+        app:itemTextColor="@color/white"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/homeView"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="17dp"
+            android:layout_marginBottom="4dp"
+            app:lottie_rawRes="@raw/home"
+            android:layout_weight="1"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/searchView"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="17dp"
+            app:lottie_rawRes="@raw/search"
+            android:layout_weight="1" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/videoView"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/video"
+                android:layout_weight="1" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/favorateView"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/heart"
+                android:layout_weight="1"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/profileView"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/user"
+                android:padding="17dp"
+                android:layout_weight="1" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+</RelativeLayout>
