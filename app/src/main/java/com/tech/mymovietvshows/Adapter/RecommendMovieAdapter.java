@@ -2,7 +2,6 @@ package com.tech.mymovietvshows.Adapter;
 
 import static com.tech.mymovietvshows.MainActivity.api;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -15,13 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
+import com.tech.mymovietvshows.Model.MovieVideosModel;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
@@ -32,54 +31,53 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<TrendingPopularTopRatedRVAdapter.ViewHolder> {
+public class RecommendMovieAdapter extends RecyclerView.Adapter<RecommendMovieAdapter.viewHolder> {
 
     Context context;
-    List<TrendingPopularTopRatedMovieResultModel> trendingMovieResultModelList;
+    List<TrendingPopularTopRatedMovieResultModel> recommendMovieList;
 
-    public TrendingPopularTopRatedRVAdapter(Context context, List<TrendingPopularTopRatedMovieResultModel> trendingMovieResultModelList) {
+    public RecommendMovieAdapter(Context context, List<TrendingPopularTopRatedMovieResultModel> recommendMovieList) {
         this.context = context;
-        this.trendingMovieResultModelList = trendingMovieResultModelList;
+        this.recommendMovieList = recommendMovieList;
     }
 
     @NonNull
     @Override
-    public TrendingPopularTopRatedRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecommendMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout, parent, false);
-        return new ViewHolder(view);
+        return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrendingPopularTopRatedRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecommendMovieAdapter.viewHolder holder, int position) {
 
-        TrendingPopularTopRatedMovieResultModel trendingMovieResultModel = trendingMovieResultModelList.get(position);
+        TrendingPopularTopRatedMovieResultModel recommendMovieModel = recommendMovieList.get(position);
 
-        Log.d("debug", trendingMovieResultModel.getPoster_path());
+        Log.d("debug", recommendMovieModel.getPoster_path());
 
-        int id = trendingMovieResultModel.getId();
+        int id = recommendMovieModel.getId();
 
         Picasso.get()
-                .load(trendingMovieResultModel.getPoster_path())
+                .load(recommendMovieModel.getPoster_path())
                 .placeholder(R.drawable.image_loading)
                 .into(holder.posterImageView);
 
-        holder.ratingNo.setText(String.valueOf(trendingMovieResultModel.getVote_average()));
+        holder.ratingNo.setText(String.valueOf(recommendMovieModel.getVote_average()));
 
-        if (trendingMovieResultModel.getOriginal_title() != null) {
+        if (recommendMovieModel.getOriginal_title() != null) {
 
-            holder.movieName.setText(trendingMovieResultModel.getOriginal_title());
+            holder.movieName.setText(recommendMovieModel.getOriginal_title());
         } else {
-            holder.movieName.setText(trendingMovieResultModel.getName());
+            holder.movieName.setText(recommendMovieModel.getName());
         }
 
-        if (trendingMovieResultModel.getRelease_date() != null) {
+        if (recommendMovieModel.getRelease_date() != null) {
 
-            holder.releaseDate.setText(trendingMovieResultModel.getRelease_date());
+            holder.releaseDate.setText(recommendMovieModel.getRelease_date());
             holder.releaseDate.setVisibility(View.VISIBLE);
-        } else if (trendingMovieResultModel.getFirst_air_date() != null) {
+        } else if (recommendMovieModel.getFirst_air_date() != null) {
 
-            holder.releaseDate.setText(trendingMovieResultModel.getFirst_air_date());
+            holder.releaseDate.setText(recommendMovieModel.getFirst_air_date());
             holder.releaseDate.setVisibility(View.VISIBLE);
         } else {
             holder.releaseDate.setVisibility(View.GONE);
@@ -119,24 +117,18 @@ public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<Trend
     }
 
     @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
     public int getItemCount() {
-        return trendingMovieResultModelList.size();
+        return recommendMovieList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class viewHolder extends RecyclerView.ViewHolder {
 
         private final AppCompatImageView posterImageView;
         private final AppCompatTextView ratingNo;
         private final AppCompatTextView movieName;
         private final AppCompatTextView releaseDate;
 
-
-        public ViewHolder(@NonNull View itemView) {
+        public viewHolder(@NonNull View itemView) {
             super(itemView);
 
             posterImageView = itemView.findViewById(R.id.poster_imageView);

@@ -12,4 +12,8 @@
     <string name="watchlist">Watchlist</string>
     <string name="cast_crew"><![CDATA[Cast & Crew]]></string>
     <string name="see_all">See all</string>
+    <string name="videos">Videos</string>
+    <string name="information">Information</string>
+    <string name="recommended">Recommended</string>
+    <string name="similar">Similar</string>
 </resources>

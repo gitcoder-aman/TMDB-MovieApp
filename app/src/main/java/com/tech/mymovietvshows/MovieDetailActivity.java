@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -22,13 +23,21 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Adapter.GenresRVAdapter;
 import com.tech.mymovietvshows.Adapter.MovieCastRVAdapter;
+import com.tech.mymovietvshows.Adapter.MovieVideoAdapter;
+import com.tech.mymovietvshows.Adapter.RecommendMovieAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Model.MovieCollectionModel;
 import com.tech.mymovietvshows.Model.MovieCreditsCastModel;
 import com.tech.mymovietvshows.Model.MovieCreditsModel;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
+import com.tech.mymovietvshows.Model.MovieDetailProductCompany;
+import com.tech.mymovietvshows.Model.MovieDetailSpokenLanguage;
 import com.tech.mymovietvshows.Model.MovieDetailsBelongToCollection;
 import com.tech.mymovietvshows.Model.MovieDetailsGenres;
+import com.tech.mymovietvshows.Model.MovieVideosModel;
+import com.tech.mymovietvshows.Model.MovieVideosResults;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieResultModel;
 
 import java.util.List;
@@ -50,6 +59,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private AppCompatTextView detailRating_no;
     private AppCompatTextView detail_overview;
     private AppCompatTextView collectionTextview;
+    private AppCompatTextView credit_seeAll;
     private RecyclerView detailGenresRV;
 
     //collection part
@@ -58,6 +68,21 @@ public class MovieDetailActivity extends AppCompatActivity {
     private AppCompatTextView detailCollectionGenresName;
 
     private RecyclerView creditRecyclerView;
+    private RecyclerView videoRecyclerView;
+    private RecyclerView recommendRecycler;
+    private RecyclerView similarRecycler;
+    private LinearLayoutCompat videoLinearLayout;
+    private LinearLayoutCompat recommend_linearLayout;
+    private LinearLayoutCompat similar_linearLayout;
+
+    //information
+    private AppCompatTextView detailReleaseDate;
+    private AppCompatTextView detailLanguage;
+    private AppCompatTextView detailBudget;
+    private AppCompatTextView detailRevenue;
+    private AppCompatTextView detailProductComp;
+    private LinearLayoutCompat infoLinearLayout;
+    private LinearLayoutCompat posterDetailLL;
 
 
     @Override
@@ -76,18 +101,42 @@ public class MovieDetailActivity extends AppCompatActivity {
         detail_overview = findViewById(R.id.detail_overview);
         detailLinearLayout = findViewById(R.id.detailLinearLayout);
         collectionTextview = findViewById(R.id.collectionTextview);
+        credit_seeAll = findViewById(R.id.credit_seeAll);
 
         detailCollectionPoster = findViewById(R.id.detailCollectionPoster);
         detailCollectionName = findViewById(R.id.detailCollectionName);
         detailCollectionGenresName = findViewById(R.id.detailCollectionGenresName);
 
         creditRecyclerView = findViewById(R.id.CreditRecyclerView);
+        videoRecyclerView = findViewById(R.id.videoRecyclerView);
+        videoLinearLayout = findViewById(R.id.videoLinearLayout);
+        recommend_linearLayout = findViewById(R.id.recommend_linearLayout);
+        similar_linearLayout = findViewById(R.id.similar_linearLayout);
 
-        creditRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        //information id find
+        detailReleaseDate = findViewById(R.id.detailReleaseDate);
+        detailLanguage = findViewById(R.id.detailLanguage);
+        detailBudget = findViewById(R.id.detailBudget);
+        detailRevenue = findViewById(R.id.detailRevenue);
+        detailProductComp = findViewById(R.id.detailProductComp);
+        infoLinearLayout = findViewById(R.id.infoLinearLayout);
+        posterDetailLL = findViewById(R.id.posterDetailLL);
+
+        recommendRecycler = findViewById(R.id.recommendRecycler);
+        similarRecycler = findViewById(R.id.similarRecycler);
+
+        creditRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        videoRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         detailGenresRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        recommendRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+        similarRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
         Intent intent = getIntent();
+
 
         if (intent != null && intent.getExtras() != null) {
 
@@ -107,9 +156,12 @@ public class MovieDetailActivity extends AppCompatActivity {
 
                                 if (movieDetailModelResponse != null) {
                                     prepareMovieDetails(movieDetailModelResponse);
+                                    posterDetailLL.setVisibility(View.VISIBLE);
+                                    infoLinearLayout.setVisibility(View.VISIBLE);
 
                                 } else {
                                     detailLinearLayout.setVisibility(View.GONE);
+                                    infoLinearLayout.setVisibility(View.GONE);
                                     Log.d("debug", "movie Detail NULL");
                                     Toast.makeText(MovieDetailActivity.this, "Movie Detail NULL", Toast.LENGTH_SHORT).show();
                                 }
@@ -117,17 +169,17 @@ public class MovieDetailActivity extends AppCompatActivity {
                                 //to get collection id
                                 assert movieDetailModelResponse != null;
                                 MovieDetailsBelongToCollection movieDetailsBelongToCollection = movieDetailModelResponse.getBelongs_to_collection();
-                                List<MovieDetailsGenres>  genresList = movieDetailModelResponse.getGenres(); // for get genres name
+                                List<MovieDetailsGenres> genresList = movieDetailModelResponse.getGenres(); // for get genres name
 
                                 if (movieDetailsBelongToCollection != null && genresList != null) {
 
-                                        CallGenresListShow(genresList);
-                                        GenresRVAdapter adapter = new GenresRVAdapter(genresList, MovieDetailActivity.this);
-                                        detailGenresRV.setAdapter(adapter);
+                                    CallGenresListShow(genresList);
+                                    GenresRVAdapter adapter = new GenresRVAdapter(genresList, MovieDetailActivity.this);
+                                    detailGenresRV.setAdapter(adapter);
 
                                     Integer collection_id = movieDetailsBelongToCollection.getId();
                                     CallMovieCollection(collection_id);
-                                } else{
+                                } else {
                                     collectionLayout.setVisibility(View.GONE);
                                     Log.d("debug", "Movie Collection is Null");
                                 }
@@ -141,17 +193,17 @@ public class MovieDetailActivity extends AppCompatActivity {
                         });
 
                 //Cast and crew of movie set
-                RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(movie_id,api).enqueue(new Callback<MovieCreditsModel>() {
+                RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(movie_id, api).enqueue(new Callback<MovieCreditsModel>() {
                     @Override
                     public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
 
                         MovieCreditsModel movieCreditModel = response.body();
 
-                        if(movieCreditModel != null){
-                            List<MovieCreditsCastModel>movieCreditsCastModelList = movieCreditModel.getCast();
+                        if (movieCreditModel != null) {
+                            List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
 
-                            if(movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()){
-                                MovieCastRVAdapter adapter = new MovieCastRVAdapter(MovieDetailActivity.this,movieCreditsCastModelList);
+                            if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
+                                MovieCastRVAdapter adapter = new MovieCastRVAdapter(MovieDetailActivity.this, movieCreditsCastModelList);
                                 creditRecyclerView.setAdapter(adapter);
 
                                 //Create some animation view item loading
@@ -167,6 +219,120 @@ public class MovieDetailActivity extends AppCompatActivity {
                         Log.d("movie_detail", "On Response Fail");
                     }
                 });
+
+                credit_seeAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent1 = new Intent(MovieDetailActivity.this, MovieCreditActivity.class);
+                        intent1.putExtra("credit_movieId", String.valueOf(movie_id));
+                        Log.d("credit", "pass " + movie_id);
+                        startActivity(intent1);
+                    }
+                });
+
+                //Movie Video show
+                RetrofitInstance.getInstance().apiInterface.getMovieVideosById(movie_id, api).enqueue(new Callback<MovieVideosModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<MovieVideosModel> call, @NonNull Response<MovieVideosModel> response) {
+
+                        MovieVideosModel movieVideosModel = response.body();
+                        if (movieVideosModel != null) {
+
+                            List<MovieVideosResults> movieVideosResultsList = movieVideosModel.getResults();
+
+                            if (movieVideosResultsList != null && !movieVideosResultsList.isEmpty()) {
+
+                                MovieVideoAdapter adapter = new MovieVideoAdapter(MovieDetailActivity.this, movieVideosResultsList);
+                                videoRecyclerView.setAdapter(adapter);
+                                videoLinearLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                videoLinearLayout.setVisibility(View.GONE);
+                            }
+                        } else {
+                            videoLinearLayout.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<MovieVideosModel> call, @NonNull Throwable t) {
+                        Log.d("video", "On Response fail");
+                    }
+                });
+
+                //show recommend movie in recyclerview
+                RetrofitInstance.getInstance().apiInterface.getRecommendationsVideosById(movie_id,api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                        TrendingPopularTopRatedMovieModel recommendMovieResponse = response.body();
+
+                        if(recommendMovieResponse != null){
+
+                            List<TrendingPopularTopRatedMovieResultModel>recommendMovieList = recommendMovieResponse.getResults();
+
+                            if(recommendMovieList != null) {
+                                RecommendMovieAdapter adapter = new RecommendMovieAdapter(MovieDetailActivity.this, recommendMovieList);
+                                recommendRecycler.setAdapter(adapter);
+
+                                recommend_linearLayout.setVisibility(View.VISIBLE);
+                                //Create some animation view item loading
+                                LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(MovieDetailActivity.this, R.anim.layout_slide_right);
+                                recommendRecycler.setLayoutAnimation(controller);
+                                recommendRecycler.scheduleLayoutAnimation();
+                            }else{
+                                recommend_linearLayout.setVisibility(View.GONE);
+                                Toast.makeText(MovieDetailActivity.this, "Movie details not available.", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            recommend_linearLayout.setVisibility(View.GONE);
+                            Toast.makeText(MovieDetailActivity.this, "Movie Detail Null.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                        Log.d("recommend", "On Response fail");
+                    }
+                });
+
+                //show similar movie in recycler view
+
+                RetrofitInstance.getInstance().apiInterface.getSimilarVideosById(movie_id,api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                        TrendingPopularTopRatedMovieModel recommendMovieResponse = response.body();
+
+                        if(recommendMovieResponse != null){
+
+                            List<TrendingPopularTopRatedMovieResultModel>recommendMovieList = recommendMovieResponse.getResults();
+
+                            if(recommendMovieList != null) {
+                                RecommendMovieAdapter adapter = new RecommendMovieAdapter(MovieDetailActivity.this, recommendMovieList);
+                                similarRecycler.setAdapter(adapter);
+
+                                similar_linearLayout.setVisibility(View.VISIBLE);
+                                //Create some animation view item loading
+                                LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(MovieDetailActivity.this, R.anim.layout_slide_right);
+                                similarRecycler.setLayoutAnimation(controller);
+                                similarRecycler.scheduleLayoutAnimation();
+                            }else{
+                                similar_linearLayout.setVisibility(View.GONE);
+                                Toast.makeText(MovieDetailActivity.this, "Movie details not available.", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            similar_linearLayout.setVisibility(View.GONE);
+                            Toast.makeText(MovieDetailActivity.this, "Movie Detail Null.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                        Log.d("recommend", "On Response fail");
+                    }
+                });
+
+
             }
         }
     }
@@ -218,10 +384,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                         collectionLayout.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Intent intent = new Intent(MovieDetailActivity.this,CollectionDetailActivity.class);
+                                Intent intent = new Intent(MovieDetailActivity.this, CollectionDetailActivity.class);
                                 intent.putExtra("collection_id", String.valueOf(collection_id));
                                 startActivity(intent);
-                                MovieDetailActivity.this.overridePendingTransition(R.anim.slide_from_bottom,R.anim.to_top);
+                                MovieDetailActivity.this.overridePendingTransition(R.anim.slide_from_bottom, R.anim.to_top);
                             }
                         });
 
@@ -269,9 +435,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
         if (movieDetailModelResponse.getVote_count() > 0) {
             detailVoteCount.setText("(" + movieDetailModelResponse.getVote_count() + ")");
-        }else{
+        } else {
             detailVoteCount.setText("(" + movieDetailModelResponse.getVote_count() + ")");
-            detailVoteCount.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.rating_blank,0,0,0);
+            detailVoteCount.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.rating_blank, 0, 0, 0);
         }
         if (movieDetailModelResponse.getVote_average() != null) {
             detailRating_no.setText(String.valueOf(movieDetailModelResponse.getVote_average()));
@@ -279,6 +445,39 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (movieDetailModelResponse.getOverview() != null) {
             detail_overview.setText(movieDetailModelResponse.getOverview());
+        }
+
+        //information LL
+        if (movieDetailModelResponse.getRelease_date() != null) {
+            detailReleaseDate.setText(Html.fromHtml("<b>" + "Release Date : " + "</b>" + "  " + movieDetailModelResponse.getRelease_date()));
+        }
+
+        List<MovieDetailSpokenLanguage> movieDetailSpokenLanguageList = movieDetailModelResponse.getSpoken_languages();
+        if (movieDetailSpokenLanguageList != null) {
+
+            detailLanguage.setText(Html.fromHtml("<b>" + "Language : " + "</b>" + "  " + movieDetailSpokenLanguageList.get(0).getEnglish_name()));
+        }
+        if (movieDetailModelResponse.getBudget() != null) {
+
+            detailBudget.setText(Html.fromHtml("<b>" + "Budget : " + "</b>" + "  " + movieDetailModelResponse.getBudget()));
+        }
+        if (movieDetailModelResponse.getRevenue() != null) {
+            detailRevenue.setText(Html.fromHtml("<b>" + "Revenue : " + "</b>" + "  " + movieDetailModelResponse.getRevenue()));
+        }
+        List<MovieDetailProductCompany> movieDetailProductCompanies = movieDetailModelResponse.getProduction_companies();
+
+        if (movieDetailProductCompanies != null && movieDetailProductCompanies.size() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < movieDetailProductCompanies.size(); i++) {
+
+                if (i == movieDetailProductCompanies.size() - 1) {
+                    stringBuilder.append(movieDetailProductCompanies.get(i).getName());
+                } else {
+                    stringBuilder.append(movieDetailProductCompanies.get(i).getName()).append(", ");
+                }
+            }
+            detailProductComp.setText(Html.fromHtml("<b>" + "Product Company : " + "</b>" + "  " + stringBuilder));
         }
 
 

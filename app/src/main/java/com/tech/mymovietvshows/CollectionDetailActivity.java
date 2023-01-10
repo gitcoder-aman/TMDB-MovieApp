@@ -44,8 +44,6 @@ public class CollectionDetailActivity extends AppCompatActivity {
 
     private RecyclerView includeRecyclerView;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

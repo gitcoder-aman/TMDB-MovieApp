@@ -15,6 +15,13 @@
         android:theme="@style/Theme.MyMovieTVShows"
         tools:targetApi="31">
         <activity
+            android:name=".MovieCreditActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CollectionDetailActivity"
             android:exported="false">
             <meta-data

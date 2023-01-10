@@ -50,7 +50,6 @@
                 android:background="@color/black"
                 android:nestedScrollingEnabled="true"
                 tools:ignore="SpeakableTextPresentCheck">
-
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.viewpager.widget.ViewPager

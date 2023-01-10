@@ -3,7 +3,9 @@ package com.tech.mymovietvshows.Interface;
 import com.tech.mymovietvshows.Model.MovieCollectionModel;
 import com.tech.mymovietvshows.Model.MovieCreditsModel;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
+import com.tech.mymovietvshows.Model.MovieVideosModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieModel;
 
 import retrofit2.Call;
@@ -42,4 +44,15 @@ public interface ApiInterface {
 
     @GET("movie/{movie_id}/credits")
     Call<MovieCreditsModel>getMovieCreditsById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
+
+    //create a Service for movie Videos
+
+    @GET("movie/{movie_id}/videos")
+    Call<MovieVideosModel>getMovieVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
+
+    @GET("movie/{movie_id}/recommendations")
+    Call<TrendingPopularTopRatedMovieModel>getRecommendationsVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
+
+    @GET("movie/{movie_id}/similar")
+    Call<TrendingPopularTopRatedMovieModel>getSimilarVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
 }
