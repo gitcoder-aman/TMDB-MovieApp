@@ -16,4 +16,7 @@
     <string name="information">Information</string>
     <string name="recommended">Recommended</string>
     <string name="similar">Similar</string>
+    <string name="biography">Biography</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -41,6 +43,7 @@ import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieResultModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,6 +87,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private LinearLayoutCompat infoLinearLayout;
     private LinearLayoutCompat posterDetailLL;
 
+    private Toolbar detailToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +130,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         recommendRecycler = findViewById(R.id.recommendRecycler);
         similarRecycler = findViewById(R.id.similarRecycler);
 
+        detailToolbar = findViewById(R.id.detailToolbar);
+
         creditRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         videoRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -134,6 +141,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         recommendRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
         similarRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+        setSupportActionBar(detailToolbar);
+        detailToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
         Intent intent = getIntent();
 
@@ -426,6 +438,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         if (movieDetailModelResponse.getOriginal_title() != null) {
+            detailToolbar.setTitle(movieDetailModelResponse.getOriginal_title());
             detailMovie_title.setText(movieDetailModelResponse.getOriginal_title());
         }
         if (movieDetailModelResponse.getPoster_path() != null) {
@@ -481,6 +494,19 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {  //When execute toolbar back pressed
+        finish();
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_top,R.anim.to_bottom);
     }
 
     @Override

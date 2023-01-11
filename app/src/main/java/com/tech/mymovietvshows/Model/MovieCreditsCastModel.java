@@ -4,7 +4,7 @@ public class MovieCreditsCastModel {
 
     private boolean adult;
     private int gender;
-    private long id;
+    private int id;
     private String known_for_department;
     private String name;
     private String original_name;
@@ -18,7 +18,7 @@ public class MovieCreditsCastModel {
     public MovieCreditsCastModel() {
     }
 
-    public MovieCreditsCastModel(boolean adult, int gender, long id, String known_for_department, String name, String original_name, Double popularity, String profile_path, Integer cast_id, String character, String credit_id, Integer order) {
+    public MovieCreditsCastModel(boolean adult, int gender, int id, String known_for_department, String name, String original_name, Double popularity, String profile_path, Integer cast_id, String character, String credit_id, Integer order) {
         this.adult = adult;
         this.gender = gender;
         this.id = id;
@@ -49,11 +49,11 @@ public class MovieCreditsCastModel {
         this.gender = gender;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

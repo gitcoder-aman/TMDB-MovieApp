@@ -1,12 +1,15 @@
 package com.tech.mymovietvshows.Interface;
 
+import com.tech.mymovietvshows.Model.GetTvShowMovieModel;
 import com.tech.mymovietvshows.Model.MovieCollectionModel;
 import com.tech.mymovietvshows.Model.MovieCreditsModel;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.MovieVideosModel;
+import com.tech.mymovietvshows.Model.PersonDetailModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieModel;
+import com.tech.mymovietvshows.Model.getCreditMovieModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -55,4 +58,16 @@ public interface ApiInterface {
 
     @GET("movie/{movie_id}/similar")
     Call<TrendingPopularTopRatedMovieModel>getSimilarVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
+
+    //get people details
+    @GET("person/{person_id}")
+    Call<PersonDetailModel>getPersonDetailById(@Path("person_id") int person_id, @Query("api_key") String api_key);
+
+    //get movie Credits details
+    @GET("person/{person_id}/movie_credits")
+    Call<getCreditMovieModel>getMovieCreditsDetailById(@Path("person_id") int person_id, @Query("api_key") String api_key);
+
+    //get movie Credits details
+    @GET("person/{person_id}/tv_credits")
+    Call<GetTvShowMovieModel>getTvCreditsDetailById(@Path("person_id") int person_id, @Query("api_key") String api_key);
 }

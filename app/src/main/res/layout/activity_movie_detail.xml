@@ -8,13 +8,13 @@
     tools:context=".MovieDetailActivity"
     android:background="@color/black">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detailToolbar"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/detailLinearLayout"
@@ -363,6 +363,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recommendRecycler"
+                    android:nestedScrollingEnabled="false"
                     android:layout_margin="10dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -371,6 +372,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/similar_linearLayout"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -407,6 +409,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/similarRecycler"
+                    android:nestedScrollingEnabled="false"
                     android:layout_margin="10dp"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
