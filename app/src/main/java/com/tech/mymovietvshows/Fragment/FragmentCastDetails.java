@@ -15,15 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Toast;
 
 import com.tech.mymovietvshows.Adapter.CreditCastAdapter;
-import com.tech.mymovietvshows.Adapter.MovieCastRVAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Model.MovieCreditsCastModel;
 import com.tech.mymovietvshows.Model.MovieCreditsModel;
 import com.tech.mymovietvshows.MovieCreditActivity;
-import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
 
 import java.util.List;

@@ -15,6 +15,8 @@ public class MovieVideosModel {
         this.results = results;
     }
 
+
+
     public Integer getId() {
         return id;
     }
@@ -30,4 +32,5 @@ public class MovieVideosModel {
     public void setResults(List<MovieVideosResults> results) {
         this.results = results;
     }
+
 }

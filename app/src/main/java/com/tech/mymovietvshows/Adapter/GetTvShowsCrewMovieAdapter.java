@@ -17,8 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
+import com.tech.mymovietvshows.Model.GetTvShowCastMovieModel;
+import com.tech.mymovietvshows.Model.GetTvShowCrewMovieModel;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
-import com.tech.mymovietvshows.Model.getCastMovieModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
 
@@ -28,41 +29,41 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class getCreditCastMovieAdapter extends RecyclerView.Adapter<getCreditCastMovieAdapter.viewHolder> {
+public class GetTvShowsCrewMovieAdapter extends RecyclerView.Adapter<GetTvShowsCrewMovieAdapter.viewHolder> {
 
     Context context;
-    List<getCastMovieModel>getCastMovieModelList;
+    List<GetTvShowCrewMovieModel>getTvShowsCrewMovieModelList;
 
-    public getCreditCastMovieAdapter(Context context, List<getCastMovieModel> getCastMovieModelList) {
+    public GetTvShowsCrewMovieAdapter(Context context, List<GetTvShowCrewMovieModel> getTvShowsCrewMovieModelList) {
         this.context = context;
-        this.getCastMovieModelList = getCastMovieModelList;
+        this.getTvShowsCrewMovieModelList = getTvShowsCrewMovieModelList;
     }
 
     @NonNull
     @Override
-    public getCreditCastMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GetTvShowsCrewMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout1,parent,false );
         return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull getCreditCastMovieAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GetTvShowsCrewMovieAdapter.viewHolder holder, int position) {
 
-        getCastMovieModel getCastMovieModel = getCastMovieModelList.get(position);
+        GetTvShowCrewMovieModel getTvShowCrewMovieModel = getTvShowsCrewMovieModelList.get(position);
 
-        if (getCastMovieModel != null) {
+        if (getTvShowCrewMovieModel != null) {
 
             Picasso.get()
-                    .load(getCastMovieModel.getPoster_path())
+                    .load(getTvShowCrewMovieModel.getPoster_path())
                     .placeholder(R.drawable.image_loading)
                     .into(holder.posterImageView);
 
-            holder.ratingNo.setText(String.valueOf(getCastMovieModel.getVote_average()));
-            holder.movieName.setText(getCastMovieModel.getOriginal_title());
-            holder.releaseDate.setText(getCastMovieModel.getRelease_date());
+            holder.ratingNo.setText(String.valueOf(getTvShowCrewMovieModel.getVote_average()));
+            holder.movieName.setText(getTvShowCrewMovieModel.getName());
+            holder.releaseDate.setText(getTvShowCrewMovieModel.getFirst_air_date());
 
-            int movie_id = getCastMovieModel.getId();
+            int movie_id = getTvShowCrewMovieModel.getId();
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,7 +100,7 @@ public class getCreditCastMovieAdapter extends RecyclerView.Adapter<getCreditCas
 
     @Override
     public int getItemCount() {
-        return getCastMovieModelList.size();
+        return getTvShowsCrewMovieModelList.size();
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

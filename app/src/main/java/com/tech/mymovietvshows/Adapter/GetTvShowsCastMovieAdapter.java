@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -43,7 +44,7 @@ public class GetTvShowsCastMovieAdapter extends RecyclerView.Adapter<GetTvShowsC
     @Override
     public GetTvShowsCastMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout,parent,false );
+        View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout1,parent,false );
         return new viewHolder(view);
     }
 

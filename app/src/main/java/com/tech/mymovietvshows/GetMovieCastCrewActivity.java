@@ -11,8 +11,9 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
-import com.tech.mymovietvshows.Adapter.ViewPagerCastCrewMovieAdapter;
-import com.tech.mymovietvshows.Adapter.ViewPagerCreditDetailsAdapter;
+import com.tech.mymovietvshows.Adapter.ViewPagerCastCrewAdapter;
+import com.tech.mymovietvshows.Fragment.FragmentCastMovie;
+import com.tech.mymovietvshows.Fragment.FragmentCrewMovie;
 
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class GetMovieCastCrewActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private Toolbar toolbar;
     private int personId;
+    private String whichPart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +45,23 @@ public class GetMovieCastCrewActivity extends AppCompatActivity {
             if (intent.getExtras().getString("pass_personId") != null) {
 
                 personId = Integer.parseInt(intent.getExtras().getString("pass_personId"));
+                whichPart = intent.getExtras().getString("pass_part");
                 Log.d("personId", String.valueOf(personId));
 
             }
         }
 
-        viewPager.setAdapter(new ViewPagerCastCrewMovieAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ViewPagerCastCrewAdapter(getSupportFragmentManager(),new FragmentCrewMovie(), new FragmentCastMovie()));
+
         tabLayout.setupWithViewPager(viewPager);
 
     }
 
     public int sendPersonId() {
         return personId ;
+    }
+    public String sendWhichPart(){
+        return whichPart;
     }
 
     @Override

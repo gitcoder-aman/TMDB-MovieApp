@@ -28,26 +28,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieCastRVAdapter extends RecyclerView.Adapter<MovieCastRVAdapter.viewHolder> {
+public class MovieCreditRVAdapter extends RecyclerView.Adapter<MovieCreditRVAdapter.viewHolder> {
 
     Context context;
     List<MovieCreditsCastModel>movieCreditsCastModelList;
 
-    public MovieCastRVAdapter(Context context, List<MovieCreditsCastModel> movieCreditsCastModelList) {
+    public MovieCreditRVAdapter(Context context, List<MovieCreditsCastModel> movieCreditsCastModelList) {
         this.context = context;
         this.movieCreditsCastModelList = movieCreditsCastModelList;
     }
 
     @NonNull
     @Override
-    public MovieCastRVAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieCreditRVAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.cast_crew_rv_layout,parent,false);
         return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieCastRVAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieCreditRVAdapter.viewHolder holder, int position) {
 
         MovieCreditsCastModel movieCreditsCastModel = movieCreditsCastModelList.get(position);
 

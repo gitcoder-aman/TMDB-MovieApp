@@ -49,6 +49,7 @@ public class PersonDetailActivity extends AppCompatActivity {
     private AppCompatTextView dob;
     private AppCompatTextView person_biography;
     private AppCompatTextView movie_seeAll;
+    private AppCompatTextView tv_seeAll;
     private LinearLayoutCompat biography_Linearlayout;
     private LinearLayoutCompat creditMovie_linearLayout;
     private LinearLayoutCompat tvShows_linearLayout;
@@ -74,6 +75,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         creditMovie_linearLayout = findViewById(R.id.creditMovie_linearLayout);
         tvShows_linearLayout = findViewById(R.id.TvShows_linearLayout);
         movie_seeAll = findViewById(R.id.movies_seeAll);
+        tv_seeAll = findViewById(R.id.tv_seeAll);
 
         moviesRecycler = findViewById(R.id.moviesRecycler);
         tvShowsRecycler = findViewById(R.id.tvShowsRecycler);
@@ -181,6 +183,7 @@ public class PersonDetailActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         Intent intent1 = new Intent(PersonDetailActivity.this, GetMovieCastCrewActivity.class);
                         intent1.putExtra("pass_personId", String.valueOf(person_id));
+                        intent1.putExtra("pass_part", "movie");
                         Log.d("personId", String.valueOf(person_id));
                         startActivity(intent1);
                     }
@@ -202,8 +205,8 @@ public class PersonDetailActivity extends AppCompatActivity {
                                 tvShows_linearLayout.setVisibility(View.VISIBLE);
                                 //Create some animation view item loading
                                 LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(PersonDetailActivity.this, R.anim.layout_slide_right);
-                                moviesRecycler.setLayoutAnimation(controller);
-                                moviesRecycler.scheduleLayoutAnimation();
+                                tvShowsRecycler.setLayoutAnimation(controller);
+                                tvShowsRecycler.scheduleLayoutAnimation();
 
 
                             }else{
@@ -215,6 +218,17 @@ public class PersonDetailActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<GetTvShowMovieModel> call, @NonNull Throwable t) {
                         Log.d("tv", "On Response fail");
+                    }
+                });
+
+                tv_seeAll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent1 = new Intent(PersonDetailActivity.this,GetMovieCastCrewActivity.class);
+                        intent1.putExtra("pass_personId", String.valueOf(person_id));
+                        intent1.putExtra("pass_part", "tv");
+                        Log.d("personId", String.valueOf(person_id));
+                        startActivity(intent1);
                     }
                 });
 

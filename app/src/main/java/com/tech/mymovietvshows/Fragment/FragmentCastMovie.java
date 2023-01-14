@@ -17,9 +17,12 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
+import com.tech.mymovietvshows.Adapter.GetTvShowsCastMovieAdapter;
 import com.tech.mymovietvshows.Adapter.getCreditCastMovieAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.GetMovieCastCrewActivity;
+import com.tech.mymovietvshows.Model.GetTvShowCastMovieModel;
+import com.tech.mymovietvshows.Model.GetTvShowMovieModel;
 import com.tech.mymovietvshows.Model.getCastMovieModel;
 import com.tech.mymovietvshows.Model.getCreditMovieModel;
 import com.tech.mymovietvshows.PersonDetailActivity;
@@ -51,6 +54,8 @@ public class FragmentCastMovie extends Fragment {
 
         GetMovieCastCrewActivity activity = (GetMovieCastCrewActivity) getActivity();
         int person_id = activity.sendPersonId();
+        String whichPart = activity.sendWhichPart();
+
         Log.d("personId1", String.valueOf(person_id));
 
         // Inflate the layout for this fragment
@@ -58,40 +63,77 @@ public class FragmentCastMovie extends Fragment {
 
         castMovieRecyclerView = view.findViewById(R.id.castMovieRecyclerView);
         
-        castMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        castMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        //get credit movie detail for cast
-        RetrofitInstance.getInstance().apiInterface.getMovieCreditsDetailById(person_id,api).enqueue(new Callback<getCreditMovieModel>() {
-            @Override
-            public void onResponse(@NonNull Call<getCreditMovieModel> call, @NonNull Response<getCreditMovieModel> response) {
+        if(whichPart.equals("movie")) {
 
-                getCreditMovieModel getCreditMovieModel = response.body();
-                if(getCreditMovieModel != null){
-                    List<getCastMovieModel> getCastMovieModelList = getCreditMovieModel.getCast();
+            //get credit movie detail for cast
+            RetrofitInstance.getInstance().apiInterface.getMovieCreditsDetailById(person_id, api).enqueue(new Callback<getCreditMovieModel>() {
+                @Override
+                public void onResponse(@NonNull Call<getCreditMovieModel> call, @NonNull Response<getCreditMovieModel> response) {
 
-                    if(getCastMovieModelList != null && !getCastMovieModelList.isEmpty()){
+                    getCreditMovieModel getCreditMovieModel = response.body();
+                    if (getCreditMovieModel != null) {
+                        List<getCastMovieModel> getCastMovieModelList = getCreditMovieModel.getCast();
 
-                        getCreditCastMovieAdapter adapter = new getCreditCastMovieAdapter(getContext(),getCastMovieModelList);
-                        castMovieRecyclerView.setAdapter(adapter);
+                        if (getCastMovieModelList != null && !getCastMovieModelList.isEmpty()) {
 
-                        //Create some animation view item loading
-                        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
-                        castMovieRecyclerView.setLayoutAnimation(controller);
-                        castMovieRecyclerView.scheduleLayoutAnimation();
+                            getCreditCastMovieAdapter adapter = new getCreditCastMovieAdapter(getContext(), getCastMovieModelList);
+                            castMovieRecyclerView.setAdapter(adapter);
 
-                    }else{
-                        Toast.makeText(activity, "cast movie not available", Toast.LENGTH_SHORT).show();
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            castMovieRecyclerView.setLayoutAnimation(controller);
+                            castMovieRecyclerView.scheduleLayoutAnimation();
+
+                        } else {
+                            Toast.makeText(activity, "cast movie not available", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d("person_credit", "credit movie null");
                     }
-                }else{
-                    Log.d("person_credit", "credit movie null");
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<getCreditMovieModel> call, @NonNull Throwable t) {
-                Log.d("person_credit", "On Response fail");
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<getCreditMovieModel> call, @NonNull Throwable t) {
+                    Log.d("person_credit", "On Response fail");
+                }
+            });
+
+        }else{
+            //tvShows movie here
+            RetrofitInstance.getInstance().apiInterface.getTvCreditsDetailById(person_id,api).enqueue(new Callback<GetTvShowMovieModel>() {
+                @Override
+                public void onResponse(@NonNull Call<GetTvShowMovieModel> call, @NonNull Response<GetTvShowMovieModel> response) {
+
+                    GetTvShowMovieModel getTvShowMovieModel = response.body();
+                    if(getTvShowMovieModel != null){
+                        List<GetTvShowCastMovieModel>getTvShowCastMovieModelList = getTvShowMovieModel.getCast();
+                        if(getTvShowCastMovieModelList != null && !getTvShowCastMovieModelList.isEmpty()){
+
+                            GetTvShowsCastMovieAdapter adapter = new GetTvShowsCastMovieAdapter(getContext(),getTvShowCastMovieModelList);
+                            castMovieRecyclerView.setAdapter(adapter);
+
+                            castMovieRecyclerView.setVisibility(View.VISIBLE);
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            castMovieRecyclerView.setLayoutAnimation(controller);
+                            castMovieRecyclerView.scheduleLayoutAnimation();
+
+
+                        }else{
+                            Toast.makeText(activity, "No available of cast movies", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<GetTvShowMovieModel> call, @NonNull Throwable t) {
+                    Log.d("tv", "On Response fail");
+                }
+            });
+
+        }
 
 
 

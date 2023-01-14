@@ -1,6 +1,7 @@
 package com.tech.mymovietvshows.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Model.MovieVideosResults;
 import com.tech.mymovietvshows.R;
+import com.tech.mymovietvshows.VideoPlayActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.viewHolder> {
@@ -48,6 +51,19 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.vi
 
             holder.movie_title.setText(movieVideosResults.getName());
             holder.movie_type.setText(movieVideosResults.getType());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, VideoPlayActivity.class);
+                    ArrayList<MovieVideosResults> movieVideosResultsArrayList = new ArrayList<>(movieVideosResultsList);
+                    //put the current video position and video list
+
+                    intent.putExtra("position", String.valueOf(holder.getAdapterPosition()));
+                    intent.putExtra("video", movieVideosResultsArrayList);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

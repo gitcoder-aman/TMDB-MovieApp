@@ -11,8 +11,9 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
-import com.tech.mymovietvshows.Adapter.ViewPagerCreditDetailsAdapter;
+import com.tech.mymovietvshows.Adapter.ViewPagerCastCrewAdapter;
 import com.tech.mymovietvshows.Fragment.FragmentCastDetails;
+import com.tech.mymovietvshows.Fragment.FragmentCrewDetails;
 
 import java.util.Objects;
 
@@ -49,7 +50,7 @@ public class MovieCreditActivity extends AppCompatActivity {
             }
         }
 
-        viewPager.setAdapter(new ViewPagerCreditDetailsAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ViewPagerCastCrewAdapter(getSupportFragmentManager(),new FragmentCrewDetails(),new FragmentCastDetails()));
         tabLayout.setupWithViewPager(viewPager);
 
     }

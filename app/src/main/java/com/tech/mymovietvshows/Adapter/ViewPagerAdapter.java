@@ -1,5 +1,7 @@
 package com.tech.mymovietvshows.Adapter;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,6 +25,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
 
+            Log.d("debug", "open trending");
         switch (position){
 
             case 1 : return new PopularFragment();

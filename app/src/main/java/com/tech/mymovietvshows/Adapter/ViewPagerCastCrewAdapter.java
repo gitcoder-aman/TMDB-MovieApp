@@ -6,13 +6,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.tech.mymovietvshows.Fragment.FragmentCastDetails;
-import com.tech.mymovietvshows.Fragment.FragmentCrewDetails;
+public class ViewPagerCastCrewAdapter extends FragmentPagerAdapter {
 
-public class ViewPagerCreditDetailsAdapter extends FragmentPagerAdapter {
+    private final Fragment f1;
+    private final Fragment f2;
 
-    public ViewPagerCreditDetailsAdapter(@NonNull FragmentManager fm) {
+    public ViewPagerCastCrewAdapter(@NonNull FragmentManager fm, Fragment fragment1, Fragment fragment2) {
         super(fm);
+
+        f1 = fragment1;
+        f2 = fragment2;
     }
 
     @NonNull
@@ -20,9 +23,9 @@ public class ViewPagerCreditDetailsAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         if (position == 1) {
-            return new FragmentCrewDetails();
+            return f1;
         }
-        return new FragmentCastDetails();
+        return f2;
     }
 
     @Override

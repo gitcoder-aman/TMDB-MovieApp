@@ -106,6 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginEnd="5dp"
+                        android:visibility="gone"
                         android:id="@+id/detailGenresRV"
                         android:scrollbars="horizontal">
                     </androidx.recyclerview.widget.RecyclerView>
@@ -345,18 +346,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold"/>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/see_all"
-                        android:layout_weight="1"
-                        android:id="@+id/recommend_seeAll"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/grey"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:drawableEnd="@drawable/ic_next"
-                        android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -391,18 +380,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold"/>
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/see_all"
-                        android:layout_weight="1"
-                        android:id="@+id/similar_seeAll"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/grey"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:drawableEnd="@drawable/ic_next"
-                        android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.recyclerview.widget.RecyclerView

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
@@ -35,12 +36,13 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
     private LottieAnimationView lottieHome;
     private LottieAnimationView lottieSearch;
     private LottieAnimationView lottieVideo;
     private LottieAnimationView lottieFav;
     private LottieAnimationView lottieProfile;
+
 
     public static String api = "ac28a3498de90c46b11f31bda02b8b97";
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         lottieVideo = findViewById(R.id.videoView);
         lottieFav = findViewById(R.id.favorateView);
         lottieProfile = findViewById(R.id.profileView);
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     lottieVideo.pauseAnimation();
                     lottieFav.pauseAnimation();
                     lottieProfile.pauseAnimation();
+
                     loadFragment(new HomeFragment());
                 } else if (id == R.id.nav_search) {
                     lottieSearch.playAnimation();
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
 
     }
 

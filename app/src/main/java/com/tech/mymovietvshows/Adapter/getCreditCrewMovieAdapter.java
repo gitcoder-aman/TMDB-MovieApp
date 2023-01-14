@@ -44,7 +44,7 @@ public class getCreditCrewMovieAdapter extends RecyclerView.Adapter<getCreditCre
     @Override
     public getCreditCrewMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout,parent,false );
+        View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout1,parent,false );
         return new viewHolder(view);
     }
 

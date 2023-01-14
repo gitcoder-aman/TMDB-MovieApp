@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Adapter.GenresRVAdapter;
-import com.tech.mymovietvshows.Adapter.MovieCastRVAdapter;
+import com.tech.mymovietvshows.Adapter.MovieCreditRVAdapter;
 import com.tech.mymovietvshows.Adapter.MovieVideoAdapter;
 import com.tech.mymovietvshows.Adapter.RecommendMovieAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
@@ -188,10 +188,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                                     CallGenresListShow(genresList);
                                     GenresRVAdapter adapter = new GenresRVAdapter(genresList, MovieDetailActivity.this);
                                     detailGenresRV.setAdapter(adapter);
+                                    detailGenresRV.setVisibility(View.VISIBLE);
 
                                     Integer collection_id = movieDetailsBelongToCollection.getId();
                                     CallMovieCollection(collection_id);
                                 } else {
+                                    detailGenresRV.setVisibility(View.GONE);
                                     collectionLayout.setVisibility(View.GONE);
                                     Log.d("debug", "Movie Collection is Null");
                                 }
@@ -215,7 +217,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                             List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
 
                             if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
-                                MovieCastRVAdapter adapter = new MovieCastRVAdapter(MovieDetailActivity.this, movieCreditsCastModelList);
+                                MovieCreditRVAdapter adapter = new MovieCreditRVAdapter(MovieDetailActivity.this, movieCreditsCastModelList);
                                 creditRecyclerView.setAdapter(adapter);
 
                                 //Create some animation view item loading

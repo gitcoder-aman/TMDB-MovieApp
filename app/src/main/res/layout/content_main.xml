@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/container3"
@@ -31,6 +28,7 @@
                 android:hint="@string/search"
                 android:inputType="text"
                 android:lines="1"
+                android:imeOptions="actionSearch"
                 android:minHeight="48dp"
                 android:padding="10dp"
                 android:textColor="@color/black"
@@ -49,19 +47,17 @@
                 app:tabGravity="fill"
                 android:background="@color/black"
                 android:nestedScrollingEnabled="true"
-                tools:ignore="SpeakableTextPresentCheck">
-            </com.google.android.material.tabs.TabLayout>
+                tools:ignore="SpeakableTextPresentCheck"/>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
                 android:background="@color/black"
-                tools:ignore="SpeakableTextPresentCheck" >
+                tools:ignore="SpeakableTextPresentCheck" />
 
-            </androidx.viewpager.widget.ViewPager>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
