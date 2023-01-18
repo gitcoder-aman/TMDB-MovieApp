@@ -5,38 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import com.tech.mymovietvshows.Adapter.UpcomingNowRVAdapter;
-import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Fragment.FavoriteFragment;
 import com.tech.mymovietvshows.Fragment.HomeFragment;
 import com.tech.mymovietvshows.Fragment.ProfileFragment;
 import com.tech.mymovietvshows.Fragment.SearchFragment;
 import com.tech.mymovietvshows.Fragment.VideoFragment;
-import com.tech.mymovietvshows.Model.MovieDetailModel;
-import com.tech.mymovietvshows.Model.UpcomingNowMovieModel;
-import com.tech.mymovietvshows.Model.UpcomingNowMovieResultModel;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    public static BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
     private LottieAnimationView lottieHome;
     private LottieAnimationView lottieSearch;
     private LottieAnimationView lottieVideo;
@@ -120,9 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
+
 
     public void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

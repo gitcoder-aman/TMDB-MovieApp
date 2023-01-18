@@ -20,4 +20,5 @@
     <string name="movies">Movies</string>
     <string name="tv_shows">Tv Shows</string>
     <string name="more_videos_are_not_found">More Videos are not found.</string>
+    <string name="enter_any_movie_title">Enter any movie title..</string>
 </resources>

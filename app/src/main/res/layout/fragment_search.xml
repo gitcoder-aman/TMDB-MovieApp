@@ -1,14 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".Fragment.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/toolbarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Search" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white_dark"
+            app:title="Search"
+            android:layout_weight="1"
+            app:titleTextColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:id="@+id/searchBtn"
+            android:src="@drawable/ic_search"
+            android:background="@color/white_dark" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/searchEditLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/source_spinner"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/queryEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@drawable/edit_background"
+                android:hint="@string/enter_any_movie_title"
+                android:inputType="text"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="5dp"
+                android:lines="1"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:drawableEnd="@drawable/ic_cancel"
+                android:imeOptions="actionSearch"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/search_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextColor="@color/white"
+        android:textAlignment="center"
+        app:tabSelectedTextColor="@color/yellow"
+        app:tabGravity="fill"
+        android:background="@color/white_dark"
+        tools:ignore="SpeakableTextPresentCheck"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.viewpager.widget.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="700dp"
+                android:id="@+id/viewPagerOfSearch"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

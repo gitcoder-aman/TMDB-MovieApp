@@ -1,7 +1,6 @@
 package com.tech.mymovietvshows.Fragment;
 
-import static com.tech.mymovietvshows.MainActivity.bottomNavigationView;
-
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -19,13 +20,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.tech.mymovietvshows.Adapter.ViewPagerAdapter;
@@ -59,7 +58,7 @@ public class HomeFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container,false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         //disable the keyword on start
 
@@ -70,9 +69,9 @@ public class HomeFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         queryEditText = view.findViewById(R.id.queryEditText);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.OpenDrawer,R.string.CloseDrawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.OpenDrawer, R.string.CloseDrawer);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -83,7 +82,7 @@ public class HomeFragment extends Fragment {
         queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int action_id, KeyEvent keyEvent) {
-                if(action_id == EditorInfo.IME_ACTION_SEARCH){
+                if (action_id == EditorInfo.IME_ACTION_SEARCH) {
 
                     if (!queryEditText.getText().toString().equals("")) {
 
@@ -98,8 +97,18 @@ public class HomeFragment extends Fragment {
                             String finalQuery = query.replace(" ", "+");   //all space character convert into concat the string.
                             Log.d("debug", finalQuery);
 
+                            SearchFragment fragment = new SearchFragment ();
+                            Bundle args = new Bundle();
+                            args.putString("finalQuery",finalQuery);
+                            fragment.setArguments(args);
+
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frameContainer, fragment ); // give your fragment container id in first parameter
+                            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                            transaction.commit();
+
                         }
-                        Toast.makeText(getContext(), query, Toast.LENGTH_SHORT).show();
+                        Log.d("HomeQuery",query);
                     }
                     return true;
                 }
@@ -108,7 +117,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-                navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 return false;
