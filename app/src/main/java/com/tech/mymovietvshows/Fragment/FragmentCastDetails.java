@@ -51,6 +51,8 @@ public class FragmentCastDetails extends Fragment {
 
         MovieCreditActivity activity = (MovieCreditActivity) getActivity();
         int getMovieId = activity.sendMovieId();
+        String getCreditType = activity.sendCreditType();
+
         Log.d("frag", String.valueOf(getMovieId));
 
         View view = inflater.inflate(R.layout.fragment_cast_details, container, false);
@@ -60,33 +62,65 @@ public class FragmentCastDetails extends Fragment {
         castRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
 
-        //Cast and crew of movie set
-        RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(getMovieId, api).enqueue(new Callback<MovieCreditsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
+        if(getCreditType.equals("movie")){
+            //Cast and crew of movie set
+            RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(getMovieId, api).enqueue(new Callback<MovieCreditsModel>() {
+                @Override
+                public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
 
-                MovieCreditsModel movieCreditModel = response.body();
+                    MovieCreditsModel movieCreditModel = response.body();
 
-                if (movieCreditModel != null) {
-                    List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
+                    if (movieCreditModel != null) {
+                        List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
 
-                    if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
-                        CreditCastAdapter adapter = new CreditCastAdapter(getContext(), movieCreditsCastModelList);
-                        castRecyclerView.setAdapter(adapter);
+                        if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
+                            CreditCastAdapter adapter = new CreditCastAdapter(getContext(), movieCreditsCastModelList);
+                            castRecyclerView.setAdapter(adapter);
 
-                        //Create some animation view item loading
-                        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
-                        castRecyclerView.setLayoutAnimation(controller);
-                        castRecyclerView.scheduleLayoutAnimation();
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            castRecyclerView.setLayoutAnimation(controller);
+                            castRecyclerView.scheduleLayoutAnimation();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
-                Log.d("movie_detail", "On Response Fail");
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
+                    Log.d("movie_detail", "On Response Fail");
+                }
+            });
+
+        }else if(getCreditType.equals("tv")){
+            //Cast and crew of tv set
+            RetrofitInstance.getInstance().apiInterface.getTvShowsCreditsById(getMovieId, api).enqueue(new Callback<MovieCreditsModel>() {
+                @Override
+                public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
+
+                    MovieCreditsModel movieCreditModel = response.body();
+
+                    if (movieCreditModel != null) {
+                        List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
+
+                        if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
+                            CreditCastAdapter adapter = new CreditCastAdapter(getContext(), movieCreditsCastModelList);
+                            castRecyclerView.setAdapter(adapter);
+
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            castRecyclerView.setLayoutAnimation(controller);
+                            castRecyclerView.scheduleLayoutAnimation();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
+                    Log.d("movie_detail", "On Response Fail");
+                }
+            });
+
+        }
 
         return view;
     }

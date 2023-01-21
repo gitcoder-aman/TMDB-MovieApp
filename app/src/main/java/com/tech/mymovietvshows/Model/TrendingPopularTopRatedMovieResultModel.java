@@ -18,13 +18,14 @@ public class TrendingPopularTopRatedMovieResultModel {
     private String release_date;
     private String first_air_date;
     private boolean video;
-    private Double vote_average;
+    private float vote_average;
     private Long vote_count;
+
 
     public TrendingPopularTopRatedMovieResultModel() {
     }
 
-    public TrendingPopularTopRatedMovieResultModel(boolean adult, String name, String backdrop_path, Integer id, String title, String original_language, String original_title, String overview, String poster_path, String media_type, Double popularity, String release_date, String first_air_date, boolean video, Double vote_average, Long vote_count) {
+    public TrendingPopularTopRatedMovieResultModel(boolean adult, String name, String backdrop_path, Integer id, String title, String original_language, String original_title, String overview, String poster_path, String media_type, Double popularity, String release_date, String first_air_date, boolean video, float vote_average, Long vote_count) {
         this.adult = adult;
         this.backdrop_path = backdrop_path;
         this.id = id;
@@ -42,6 +43,7 @@ public class TrendingPopularTopRatedMovieResultModel {
         this.vote_average = vote_average;
         this.vote_count = vote_count;
     }
+
 
 
     public String getFirst_air_date() {
@@ -69,7 +71,9 @@ public class TrendingPopularTopRatedMovieResultModel {
     }
 
     public String getBackdrop_path() {
-        return backdrop_path;
+        //create a baseUrl for this poster
+        String baseUrl = "https://image.tmdb.org/t/p/w500";
+        return baseUrl+backdrop_path;
     }
 
     public void setBackdrop_path(String backdrop_path) {
@@ -160,11 +164,11 @@ public class TrendingPopularTopRatedMovieResultModel {
         this.video = video;
     }
 
-    public Double getVote_average() {
+    public float getVote_average() {
         return vote_average;
     }
 
-    public void setVote_average(Double vote_average) {
+    public void setVote_average(float vote_average) {
         this.vote_average = vote_average;
     }
 

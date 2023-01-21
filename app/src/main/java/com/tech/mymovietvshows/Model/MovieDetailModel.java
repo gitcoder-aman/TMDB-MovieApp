@@ -36,11 +36,13 @@ public class MovieDetailModel {
     private Double vote_average;
     private Integer vote_count;
 
+    private String name;
+
 
     public MovieDetailModel() {
     }
 
-    public MovieDetailModel(boolean adult, String backdrop_path, MovieDetailsBelongToCollection belongs_to_collection, Integer budget, List<MovieDetailsGenres> genres, String homepage, Integer id, String imdb_id, String original_language, String original_title, String overview, Double popularity, String poster_path, List<MovieDetailProductCompany> production_companies, List<MovieDetailProductCountry> production_countries, String release_date, Long revenue, Integer runtime, List<MovieDetailSpokenLanguage> spoken_languages, String status, String tagline, String title, boolean video, Double vote_average, Integer vote_count) {
+    public MovieDetailModel(String name,boolean adult, String backdrop_path, MovieDetailsBelongToCollection belongs_to_collection, Integer budget, List<MovieDetailsGenres> genres, String homepage, Integer id, String imdb_id, String original_language, String original_title, String overview, Double popularity, String poster_path, List<MovieDetailProductCompany> production_companies, List<MovieDetailProductCountry> production_countries, String release_date, Long revenue, Integer runtime, List<MovieDetailSpokenLanguage> spoken_languages, String status, String tagline, String title, boolean video, Double vote_average, Integer vote_count) {
         this.adult = adult;
         this.backdrop_path = backdrop_path;
         this.belongs_to_collection = belongs_to_collection;
@@ -66,8 +68,16 @@ public class MovieDetailModel {
         this.video = video;
         this.vote_average = vote_average;
         this.vote_count = vote_count;
+        this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     public boolean getAdult() {
         return adult;
     }

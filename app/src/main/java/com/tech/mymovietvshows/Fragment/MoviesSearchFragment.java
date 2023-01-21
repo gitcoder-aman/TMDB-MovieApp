@@ -6,6 +6,7 @@ import static com.tech.mymovietvshows.MainActivity.api;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -38,6 +39,8 @@ import retrofit2.Response;
 public class MoviesSearchFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private AppCompatTextView noResultFound;
+
     public MoviesSearchFragment() {
         // Required empty public constructor
     }
@@ -57,6 +60,7 @@ public class MoviesSearchFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.movie_search_recycler);
+        noResultFound = view.findViewById(R.id.noResultFoundMovie);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -79,9 +83,13 @@ public class MoviesSearchFragment extends Fragment {
                         recyclerView.scheduleLayoutAnimation();
 
                     }else{
+                        noResultFound.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Not results Found!", Toast.LENGTH_SHORT).show();
                     }
                 }else{
+                    noResultFound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Not available", Toast.LENGTH_SHORT).show();
                 }
             }

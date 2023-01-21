@@ -6,9 +6,19 @@
     android:background="@color/black"
     tools:context=".Fragment.MoviesSearchFragment">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/noResultFoundTV"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="@string/no_results_found"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/tv_search_recycler"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -6,6 +6,7 @@ import static com.tech.mymovietvshows.MainActivity.api;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ import retrofit2.Response;
 public class TvShowSearchFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private AppCompatTextView noResultFoundTV;
 
     public TvShowSearchFragment() {
         // Required empty public constructor
@@ -52,6 +54,7 @@ public class TvShowSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_tv_show_search, container, false);
         recyclerView = view.findViewById(R.id.tv_search_recycler);
+        noResultFoundTV = view.findViewById(R.id.noResultFoundTV);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -74,9 +77,14 @@ public class TvShowSearchFragment extends Fragment {
                         recyclerView.scheduleLayoutAnimation();
 
                     }else{
+                        noResultFoundTV.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Not results Found!", Toast.LENGTH_SHORT).show();
                     }
                 }else{
+
+                    noResultFoundTV.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Not available", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/black"
     android:layout_height="match_parent">
 
     <ScrollView
@@ -52,9 +53,69 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="600dp"
+                android:layout_height="350dp"
                 android:background="@color/black"
                 tools:ignore="SpeakableTextPresentCheck" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/on_tv"
+                    android:layout_margin="15dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="2dp"
+                    android:background="@drawable/button_linear_background">
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/popularBtn"
+                        android:text="@string/popular"
+                        android:textColor="@color/white"
+                        android:background="@drawable/button_background"
+                        android:textAllCaps="false"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/airingBtn"
+                        android:text="@string/airing_today"
+                        android:textColor="@color/white"
+                        android:background="@drawable/button_background"
+                        android:textAllCaps="false"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/topRatedBtn"
+                        android:text="@string/top_rated"
+                        android:textColor="@color/white"
+                        android:background="@drawable/button_background"
+                        android:textAllCaps="false"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvRecyclerView"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

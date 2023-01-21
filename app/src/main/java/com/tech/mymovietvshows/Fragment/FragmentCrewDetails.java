@@ -50,6 +50,8 @@ public class FragmentCrewDetails extends Fragment {
 
         MovieCreditActivity activity = (MovieCreditActivity) getActivity();
         int getMovieId = activity.sendMovieId();
+        String creditType = activity.sendCreditType();
+
         Log.d("frag", String.valueOf(getMovieId));
 
         // Inflate the layout for this fragment
@@ -59,32 +61,63 @@ public class FragmentCrewDetails extends Fragment {
 
         crewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(getMovieId,api).enqueue(new Callback<MovieCreditsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
+        if(creditType.equals("movie")){
+            RetrofitInstance.getInstance().apiInterface.getMovieCreditsById(getMovieId,api).enqueue(new Callback<MovieCreditsModel>() {
+                @Override
+                public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
 
-                MovieCreditsModel movieCreditModel = response.body();
+                    MovieCreditsModel movieCreditModel = response.body();
 
-                if (movieCreditModel != null) {
-                    List<MovieCreditsCrewModel> movieCreditsCrewModelList = movieCreditModel.getCrew();
+                    if (movieCreditModel != null) {
+                        List<MovieCreditsCrewModel> movieCreditsCrewModelList = movieCreditModel.getCrew();
 
-                    if (movieCreditsCrewModelList != null && !movieCreditsCrewModelList.isEmpty()) {
-                        CreditCrewAdapter adapter = new CreditCrewAdapter(getContext(), movieCreditsCrewModelList);
-                        crewRecyclerView.setAdapter(adapter);
+                        if (movieCreditsCrewModelList != null && !movieCreditsCrewModelList.isEmpty()) {
+                            CreditCrewAdapter adapter = new CreditCrewAdapter(getContext(), movieCreditsCrewModelList);
+                            crewRecyclerView.setAdapter(adapter);
 
-                        //Create some animation view item loading
-                        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
-                        crewRecyclerView.setLayoutAnimation(controller);
-                        crewRecyclerView.scheduleLayoutAnimation();
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            crewRecyclerView.setLayoutAnimation(controller);
+                            crewRecyclerView.scheduleLayoutAnimation();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
-                Log.d("crew", "On Response Fail");
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
+                    Log.d("crew", "On Response Fail");
+                }
+            });
+
+        }else if(creditType.equals("tv")){
+            RetrofitInstance.getInstance().apiInterface.getTvShowsCreditsById(getMovieId,api).enqueue(new Callback<MovieCreditsModel>() {
+                @Override
+                public void onResponse(@NonNull Call<MovieCreditsModel> call, @NonNull Response<MovieCreditsModel> response) {
+
+                    MovieCreditsModel movieCreditModel = response.body();
+
+                    if (movieCreditModel != null) {
+                        List<MovieCreditsCrewModel> movieCreditsCrewModelList = movieCreditModel.getCrew();
+
+                        if (movieCreditsCrewModelList != null && !movieCreditsCrewModelList.isEmpty()) {
+                            CreditCrewAdapter adapter = new CreditCrewAdapter(getContext(), movieCreditsCrewModelList);
+                            crewRecyclerView.setAdapter(adapter);
+
+                            //Create some animation view item loading
+                            LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                            crewRecyclerView.setLayoutAnimation(controller);
+                            crewRecyclerView.scheduleLayoutAnimation();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<MovieCreditsModel> call, @NonNull Throwable t) {
+                    Log.d("crew", "On Response Fail");
+                }
+            });
+
+        }
         return view;
     }
 }

@@ -66,8 +66,8 @@
                 android:id="@+id/video_quality"
                 android:layout_margin="10dp"
                 android:gravity="start"
-                android:layout_gravity="top"
                 android:fontFamily="@font/acme"
+                android:layout_gravity="top"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>

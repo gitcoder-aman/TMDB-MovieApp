@@ -22,7 +22,8 @@ public class MovieCreditActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private Toolbar toolbar;
-    private int movie_id;
+    private int id;
+    private String creditType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,10 @@ public class MovieCreditActivity extends AppCompatActivity {
 
             if (intent.getExtras().getString("credit_movieId") != null) {
 
-                movie_id = Integer.parseInt(intent.getExtras().getString("credit_movieId"));
-                Log.d("credit", String.valueOf(movie_id));
+                id = Integer.parseInt(intent.getExtras().getString("credit_movieId"));
+                Log.d("credit", String.valueOf(id));
+
+                 creditType = intent.getExtras().getString("creditType");
 
             }
         }
@@ -56,7 +59,10 @@ public class MovieCreditActivity extends AppCompatActivity {
     }
 
     public int sendMovieId() {
-        return movie_id;
+        return id;
+    }
+    public String sendCreditType() {
+        return creditType;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {  //When execute toolbar back pressed

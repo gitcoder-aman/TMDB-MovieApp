@@ -97,6 +97,7 @@ public class RecommendMovieAdapter extends RecyclerView.Adapter<RecommendMovieAd
                         if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
                             Intent intent = new Intent(context, MovieDetailActivity.class);
                             intent.putExtra("id", String.valueOf(id));
+                            intent.putExtra("mediaType", recommendMovieModel.getMedia_type());
                             context.startActivity(intent);
 
                         } else {

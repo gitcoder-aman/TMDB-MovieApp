@@ -69,7 +69,7 @@ public class PopularFragment extends Fragment {
                                 TrendingPopularTopRatedRVAdapter TPRVAdapter = new TrendingPopularTopRatedRVAdapter(getContext(),TPMovieResultModelList);
                                 popularRecyclerView.setAdapter(TPRVAdapter);
 
-                                //Create some animation view item loading
+//                                Create some animation view item loading
                                 LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                                 popularRecyclerView.setLayoutAnimation(controller);
                                 popularRecyclerView.scheduleLayoutAnimation();

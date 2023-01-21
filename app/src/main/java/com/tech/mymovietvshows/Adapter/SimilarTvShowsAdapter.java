@@ -21,6 +21,7 @@ import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
+import com.tech.mymovietvshows.TvShowsDetailActivity;
 
 import java.util.List;
 
@@ -28,25 +29,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.viewHolder> {
+public class SimilarTvShowsAdapter extends RecyclerView.Adapter<SimilarTvShowsAdapter.viewHolder> {
 
     Context context;
     List<TrendingPopularTopRatedMovieResultModel> similarMovieList;
 
-    public SimilarMovieAdapter(Context context, List<TrendingPopularTopRatedMovieResultModel> similarMovieList) {
+    public SimilarTvShowsAdapter(Context context, List<TrendingPopularTopRatedMovieResultModel> similarMovieList) {
         this.context = context;
         this.similarMovieList = similarMovieList;
     }
 
     @NonNull
     @Override
-    public SimilarMovieAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SimilarTvShowsAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout, parent, false);
         return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SimilarMovieAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SimilarTvShowsAdapter.viewHolder holder, int position) {
 
         TrendingPopularTopRatedMovieResultModel similarMovieModel = similarMovieList.get(position);
 
@@ -85,16 +86,15 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
             @Override
             public void onClick(View view) {
 
-                RetrofitInstance.getInstance().apiInterface.getMovieDetailsById(id, api).enqueue(new Callback<MovieDetailModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTvShowsDetailsById(id, api).enqueue(new Callback<MovieDetailModel>() {
                     @Override
                     public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
                         Log.d("debug", "On Response");
                         MovieDetailModel movieDetailModelResponse = response.body();
 
                         if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
-                            Intent intent = new Intent(context, MovieDetailActivity.class);
+                            Intent intent = new Intent(context, TvShowsDetailActivity.class);
                             intent.putExtra("id", String.valueOf(id));
-                            intent.putExtra("mediaType", similarMovieModel.getMedia_type());
                             context.startActivity(intent);
 
                         } else {
@@ -109,8 +109,6 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
                         Log.d("debug", "On Response Fail");
                     }
                 });
-
-
             }
         });
     }

@@ -1,17 +1,21 @@
 package com.tech.mymovietvshows.Fragment;
 
-import android.content.Intent;
+import static com.tech.mymovietvshows.MainActivity.api;
+import static com.tech.mymovietvshows.MainActivity.bottomNavigationView;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -20,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,8 +33,18 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.tech.mymovietvshows.Adapter.PopularRatedTVShowRVAdapter;
 import com.tech.mymovietvshows.Adapter.ViewPagerAdapter;
+import com.tech.mymovietvshows.Client.RetrofitInstance;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
+import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.R;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -41,6 +57,13 @@ public class HomeFragment extends Fragment {
     private TabLayout tabLayout;
 
     private EditText queryEditText;
+
+    //on TV
+    private AppCompatButton popularBtn;
+    private AppCompatButton airingBtn;
+    private AppCompatButton topRatedBtn;
+    private RecyclerView tvRecyclerView;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,6 +91,12 @@ public class HomeFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
         queryEditText = view.findViewById(R.id.queryEditText);
+
+        //on TV Shows
+        popularBtn = view.findViewById(R.id.popularBtn);
+        airingBtn = view.findViewById(R.id.airingBtn);
+        topRatedBtn = view.findViewById(R.id.topRatedBtn);
+        tvRecyclerView = view.findViewById(R.id.tvRecyclerView);
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
@@ -102,6 +131,7 @@ public class HomeFragment extends Fragment {
                             args.putString("finalQuery",finalQuery);
                             fragment.setArguments(args);
 
+                            bottomNavigationView.setSelectedItemId(R.id.nav_search);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             transaction.replace(R.id.frameContainer, fragment ); // give your fragment container id in first parameter
                             transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
@@ -116,6 +146,175 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+        //for on TV Shows
+        tvRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+        RetrofitInstance.getInstance().apiInterface.getPopularTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+            @Override
+            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                TrendingPopularTopRatedMovieModel TPTVModel = response.body();
+
+                if (TPTVModel != null) {
+
+                    List<TrendingPopularTopRatedMovieResultModel> TPMovieResultModelList = TPTVModel.getResults();
+
+                    if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
+
+                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                        tvRecyclerView.setAdapter(TPRVAdapter);
+
+                        //Create some animation view item loading
+                        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                        tvRecyclerView.setLayoutAnimation(controller);
+                        tvRecyclerView.scheduleLayoutAnimation();
+
+                    } else {
+                        Log.d("debug", "Null List");
+                    }
+                }else{
+                    Log.d("debug", "Model NULL");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                Log.d("homeTv","On Response fail");
+            }
+        });
+
+        popularBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+
+                RetrofitInstance.getInstance().apiInterface.getPopularTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                        TrendingPopularTopRatedMovieModel TPTVModel = response.body();
+
+                        if (TPTVModel != null) {
+
+                            List<TrendingPopularTopRatedMovieResultModel> TPMovieResultModelList = TPTVModel.getResults();
+
+                            if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
+
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+
+                                tvRecyclerView.setAdapter(TPRVAdapter);
+
+                                //Create some animation view item loading
+                                LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                                tvRecyclerView.setLayoutAnimation(controller);
+                                tvRecyclerView.scheduleLayoutAnimation();
+
+                            } else {
+                                Log.d("debug", "Null List");
+                            }
+                        }else{
+                            Log.d("debug", "Model NULL");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                        Log.d("homeTv","On Response fail");
+                    }
+                });
+
+            }
+        });
+        airingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+
+                RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                        TrendingPopularTopRatedMovieModel TPTVModel = response.body();
+
+                        if (TPTVModel != null) {
+
+                            List<TrendingPopularTopRatedMovieResultModel> TPMovieResultModelList = TPTVModel.getResults();
+
+                            if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
+
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                                tvRecyclerView.setAdapter(TPRVAdapter);
+
+                                //Create some animation view item loading
+                                LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                                tvRecyclerView.setLayoutAnimation(controller);
+                                tvRecyclerView.scheduleLayoutAnimation();
+
+                            } else {
+                                Log.d("debug", "Null List");
+                            }
+                        }else{
+                            Log.d("debug", "Model NULL");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                        Log.d("homeTv","On Response fail");
+                    }
+                });
+
+            }
+        });
+        topRatedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+
+                RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                        TrendingPopularTopRatedMovieModel TPTVModel = response.body();
+
+                        if (TPTVModel != null) {
+
+                            List<TrendingPopularTopRatedMovieResultModel> TPMovieResultModelList = TPTVModel.getResults();
+
+                            if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
+
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                                tvRecyclerView.setAdapter(TPRVAdapter);
+
+                                //Create some animation view item loading
+                                LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
+                                tvRecyclerView.setLayoutAnimation(controller);
+                                tvRecyclerView.scheduleLayoutAnimation();
+
+                            } else {
+                                Log.d("debug", "Null List");
+                            }
+                        }else{
+                            Log.d("debug", "Model NULL");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                        Log.d("homeTv","On Response fail");
+                    }
+                });
+
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -44,7 +44,9 @@ public class UpcomingNowMovieResultModel {
     }
 
     public String getBackdrop_path() {
-        return backdrop_path;
+        //create a baseUrl for this poster
+        String baseUrl = "https://image.tmdb.org/t/p/w500";
+        return baseUrl+backdrop_path;
     }
 
     public void setBackdrop_path(String backdrop_path) {

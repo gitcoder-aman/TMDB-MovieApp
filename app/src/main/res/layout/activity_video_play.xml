@@ -4,63 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".VideoPlayActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/video_player_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/video_player_layout">
+        android:orientation="vertical">
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/youtube_player_view"
             app:autoPlay="false"
-            app:handleNetworkEvents="true"
-            app:enableAutomaticInitialization="false"/>
+            app:enableAutomaticInitialization="false"
+            app:handleNetworkEvents="true" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/play_video_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/play_video_title"
         android:layout_below="@+id/video_player_layout"
         android:fontFamily="@font/acme"
         android:padding="15dp"
-        android:textSize="16sp"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@drawable/drop_shadow"
-        android:layout_below="@+id/play_video_title"/>
+        android:layout_below="@+id/play_video_title"
+        android:background="@drawable/drop_shadow" />
 
     <!--    Create a Recycler view to show the other video -->
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/other_videos_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/other_videos_recyclerView"
         android:layout_below="@+id/shadow" />
 
     <!--    when no videos are not found show the textview-->
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/no_result_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/no_result_found"
         android:layout_below="@+id/shadow"
-        android:text="@string/more_videos_are_not_found"
-        android:textSize="20sp"
-        android:textColor="#3e3e3e"
-        android:textStyle="bold|italic"
-        android:layout_marginTop="70dp"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:layout_marginTop="70dp"
+        android:text="@string/more_videos_are_not_found"
+        android:textColor="#3e3e3e"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:visibility="gone" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

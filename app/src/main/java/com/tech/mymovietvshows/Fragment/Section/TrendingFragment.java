@@ -73,7 +73,7 @@ public class TrendingFragment extends Fragment {
                                 TrendingPopularTopRatedRVAdapter trendingRVAdapter = new TrendingPopularTopRatedRVAdapter(getContext(),trendingMovieResultModelList);
                                 trendingRecyclerView.setAdapter(trendingRVAdapter);
 
-                                //Create some animation view item loading
+//                                Create some animation view item loading
                                 LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                                 trendingRecyclerView.setLayoutAnimation(controller);
                                 trendingRecyclerView.scheduleLayoutAnimation();

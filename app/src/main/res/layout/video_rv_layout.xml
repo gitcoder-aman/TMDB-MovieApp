@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/movie_type"
+        android:visibility="gone"
         android:textSize="12sp"
         android:layout_gravity="center"
         android:gravity="center"

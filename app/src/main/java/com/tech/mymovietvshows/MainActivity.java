@@ -23,7 +23,7 @@ import com.tech.mymovietvshows.Fragment.VideoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
     private LottieAnimationView lottieHome;
     private LottieAnimationView lottieSearch;
     private LottieAnimationView lottieVideo;

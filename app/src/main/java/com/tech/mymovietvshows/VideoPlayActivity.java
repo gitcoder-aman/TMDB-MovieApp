@@ -1,5 +1,6 @@
 package com.tech.mymovietvshows;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -20,6 +22,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.ui.DefaultPlayerUiController;
 import com.tech.mymovietvshows.Adapter.ExtraVideosRecyclerAdapter;
@@ -60,6 +63,7 @@ public class VideoPlayActivity extends AppCompatActivity {
 
             ArrayList<MovieVideosResults>movieVideosModelArrayList = intent.getExtras().getParcelableArrayList("video");
             int position = Integer.parseInt(intent.getExtras().getString("position"));
+
 
             if(movieVideosModelArrayList != null && !movieVideosModelArrayList.isEmpty()){
 
@@ -111,6 +115,7 @@ public class VideoPlayActivity extends AppCompatActivity {
                         }
                     });
 
+
                     //Load other videos in Recycler view
 
                     ArrayList<MovieVideosResults> movieVideosResultsArrayList1 = new ArrayList<>(movieVideosModelArrayList);
@@ -154,5 +159,11 @@ public class VideoPlayActivity extends AppCompatActivity {
 
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        youTubePlayerView.release();
     }
 }

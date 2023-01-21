@@ -21,4 +21,17 @@
     <string name="tv_shows">Tv Shows</string>
     <string name="more_videos_are_not_found">More Videos are not found.</string>
     <string name="enter_any_movie_title">Enter any movie title..</string>
+    <string name="no_results_found">No Results found.</string>
+    <string name="trending_videos">Trending Videos</string>
+    <string name="movie">Movies</string>
+    <string name="tv">TV</string>
+    <string name="popular">Popular</string>
+    <string name="airing_today">Airing Today</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="on_tv">On TV Shows</string>
+    <string name="movie_videos">Movie Videos</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="tv_shows_videos">Tv Shows Videos</string>
+    <string name="on_tv_">On TV</string>
 </resources>

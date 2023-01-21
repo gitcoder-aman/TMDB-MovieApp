@@ -8,7 +8,6 @@ import com.tech.mymovietvshows.Model.MovieResponse;
 import com.tech.mymovietvshows.Model.MovieVideosModel;
 import com.tech.mymovietvshows.Model.PersonDetailModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
-import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieModel;
 import com.tech.mymovietvshows.Model.getCreditMovieModel;
 
@@ -19,7 +18,7 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("trending/all/day")
+    @GET("trending/movie/day")
     Call<TrendingPopularTopRatedMovieModel> getTrendingMovie(@Query("api_key") String api_key);
 
     @GET("movie/popular")
@@ -53,6 +52,8 @@ public interface ApiInterface {
 
     @GET("movie/{movie_id}/videos")
     Call<MovieVideosModel> getMovieVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
+    @GET("tv/{tv_id}/videos")
+    Call<MovieVideosModel> getTvVideosById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
 
     @GET("movie/{movie_id}/recommendations")
     Call<TrendingPopularTopRatedMovieModel> getRecommendationsVideosById(@Path("movie_id") int movie_id, @Query("api_key") String api_key);
@@ -77,5 +78,38 @@ public interface ApiInterface {
 
     @GET("search/tv")
     Call<MovieResponse> getTvByQuery(@Query("api_key") String api_key, @Query("query") String query);
+
+    @GET("trending/movie/day")
+    Call<TrendingPopularTopRatedMovieModel> getTrendingMovieDay(@Query("api_key") String api_key);
+
+    @GET("trending/tv/day")
+    Call<TrendingPopularTopRatedMovieModel> getTrendingTvDay(@Query("api_key") String api_key);
+
+    @GET("tv/popular")
+    Call<TrendingPopularTopRatedMovieModel> getPopularTv(@Query("api_key") String api_key);
+
+    @GET("tv/airing_today")
+    Call<TrendingPopularTopRatedMovieModel> getAiringTodayTv(@Query("api_key") String api_key);
+
+    @GET("tv/on_the_air")
+    Call<TrendingPopularTopRatedMovieModel> getOnTheAirTv(@Query("api_key") String api_key);
+
+    @GET("tv/top_rated")
+    Call<TrendingPopularTopRatedMovieModel> getTopRatedTv(@Query("api_key") String api_key);
+
+    @GET("tv/{tv_id}/recommendations")
+    Call<TrendingPopularTopRatedMovieModel> getRecommendationsTvShowById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
+
+    @GET("tv/{tv_id}/similar")
+    Call<TrendingPopularTopRatedMovieModel> getSimilarTvShowById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
+
+    //create a Service for movie Details
+
+    @GET("tv/{tv_id}")
+    Call<MovieDetailModel> getTvShowsDetailsById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
+
+    @GET("tv/{tv_id}/credits")
+    Call<MovieCreditsModel> getTvShowsCreditsById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
+
 
 }
