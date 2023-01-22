@@ -1,6 +1,7 @@
 package com.tech.mymovietvshows.Adapter;
 
 import static com.tech.mymovietvshows.MainActivity.api;
+import static com.tech.mymovietvshows.MainActivity.lottieFav;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
+import com.tech.mymovietvshows.Database.DatabaseHelper;
+import com.tech.mymovietvshows.Database.MovieTV;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
 import com.tech.mymovietvshows.TvShowsDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,33 +57,42 @@ public class PopularRatedTVShowRVAdapter extends RecyclerView.Adapter<PopularRat
 
         TrendingPopularTopRatedMovieResultModel trendingMovieResultModel = trendingMovieResultModelList.get(position);
 
-        Log.d("debug", trendingMovieResultModel.getPoster_path());
+//        Log.d("debug", trendingMovieResultModel.getPoster_path());
 
+        String movieName;
+        if (trendingMovieResultModel.getOriginal_title() != null) {
+            movieName = trendingMovieResultModel.getOriginal_title();
+        } else {
+            movieName = trendingMovieResultModel.getName();
+        }
+        String releaseDate;
+        if (trendingMovieResultModel.getRelease_date() != null) {
+
+            releaseDate = trendingMovieResultModel.getRelease_date();
+        } else {
+            releaseDate = trendingMovieResultModel.getFirst_air_date();
+        }
+        String posterImage = trendingMovieResultModel.getPoster_path();
+        float rating = trendingMovieResultModel.getVote_average();
         int id = trendingMovieResultModel.getId();
 
         Picasso.get()
-                .load(trendingMovieResultModel.getPoster_path())
+                .load(posterImage)
                 .placeholder(R.drawable.image_loading)
                 .into(holder.posterImageView);
 
-        holder.ratingNo.setText(String.valueOf(trendingMovieResultModel.getVote_average()));
+        holder.ratingNo.setText(String.valueOf(rating));
 
-        if (trendingMovieResultModel.getOriginal_title() != null) {
+        if (movieName != null) {
 
-            holder.movieName.setText(trendingMovieResultModel.getOriginal_title());
-        } else {
-            holder.movieName.setText(trendingMovieResultModel.getName());
+            holder.movieName.setText(movieName);
         }
 
-        if (trendingMovieResultModel.getRelease_date() != null) {
+        if (releaseDate != null) {
 
-            holder.releaseDate.setText(trendingMovieResultModel.getRelease_date());
+            holder.releaseDate.setText(releaseDate);
             holder.releaseDate.setVisibility(View.VISIBLE);
-        } else if (trendingMovieResultModel.getFirst_air_date() != null) {
-
-            holder.releaseDate.setText(trendingMovieResultModel.getFirst_air_date());
-            holder.releaseDate.setVisibility(View.VISIBLE);
-        } else {
+        }  else {
             holder.releaseDate.setVisibility(View.GONE);
         }
 
@@ -114,33 +127,39 @@ public class PopularRatedTVShowRVAdapter extends RecyclerView.Adapter<PopularRat
             }
         });
 
+        DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
+
+        ArrayList<MovieTV> arrayList = (ArrayList<MovieTV>) databaseHelper.movieTVDAO().getAllMovieTV();
         //favorite button work
-//        holder.favBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (holder.favBtn.getText().toString().equals("Watchlist")) {
-//
-//                    MyDBHelper myDBHelper = new MyDBHelper(context);
-//
-//                    int id = trendingMovieResultModel.getId();
-//                    String posterImage = trendingMovieResultModel.getPoster_path();
-//                    float rating = trendingMovieResultModel.getVote_average();
-//                    String movieName = trendingMovieResultModel.getName();
-//                    String releaseDate = trendingMovieResultModel.getRelease_date();
-//
-//                    boolean insertData = myDBHelper.insert_data( posterImage, movieName);
-//
-//                    if (insertData) {
-//                        holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-//                        holder.favBtn.setText("WatchListed");
-//
-//                    } else {
-//                        Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
+        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (holder.favBtn.getText().toString().equals("Watchlist")) {
+
+                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+
+                    holder.favBtn.setText("Watchlisted");
+                    holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                    lottieFav.playAnimation();
+
+
+                } else {
+                    //remove data from favorite database
+                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+
+                    holder.favBtn.setText("Watchlist");
+                    holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);
+                }
+            }
+        });
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (arrayList.get(i).getId() == trendingMovieResultModelList.get(position).getId()) {
+                holder.favBtn.setText("Watchlisted");
+                holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+            }
+        }
     }
 
     @Override

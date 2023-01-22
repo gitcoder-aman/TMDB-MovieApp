@@ -65,4 +65,11 @@ dependencies {
 
     //youtube videoplay
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
+
+    //    paperdb to store the movie details in offline in app
+    implementation 'io.github.pilgr:paperdb:2.7.2'
+
+    //Room database library
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 }

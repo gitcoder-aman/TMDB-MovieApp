@@ -91,7 +91,7 @@ public class FragmentCrewMovie extends Fragment {
                             crewMovieRecyclerView.scheduleLayoutAnimation();
 
                         } else {
-                            Toast.makeText(activity, "cast movie not available", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "crew movie not available", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Log.d("person_credit", "credit movie null");

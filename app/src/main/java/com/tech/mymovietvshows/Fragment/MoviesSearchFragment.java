@@ -21,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.tech.mymovietvshows.Adapter.SearchMovieAdapter;
 import com.tech.mymovietvshows.Adapter.getCreditCastMovieAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
@@ -31,6 +32,7 @@ import com.tech.mymovietvshows.R;
 
 import java.util.List;
 
+import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,6 +83,13 @@ public class MoviesSearchFragment extends Fragment {
                         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                         recyclerView.setLayoutAnimation(controller);
                         recyclerView.scheduleLayoutAnimation();
+
+                        //now store the results in paper database to access offline
+
+                        Paper.book().write("cache", new Gson().toJson(movieResponse));
+
+                        //store also category to set the spinner at app start
+                        Paper.book().write("source", "movie");
 
                     }else{
                         noResultFound.setVisibility(View.VISIBLE);

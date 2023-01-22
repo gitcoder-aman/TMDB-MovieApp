@@ -15,13 +15,13 @@ public class GetTvShowCastMovieModel {
     private String overview;
     private Double popularity;
     private String poster_path;
-    private double vote_average;
+    private float vote_average;
     private int vote_count;
 
     public GetTvShowCastMovieModel() {
     }
 
-    public GetTvShowCastMovieModel(Integer id,boolean adult, String backdrop_path, String character, String credit_id, int episode_count, String first_air_date, String name, String original_language, String original_name, String overview, Double popularity, String poster_path, double vote_average, int vote_count) {
+    public GetTvShowCastMovieModel(Integer id,boolean adult, String backdrop_path, String character, String credit_id, int episode_count, String first_air_date, String name, String original_language, String original_name, String overview, Double popularity, String poster_path, float vote_average, int vote_count) {
         this.adult = adult;
         this.id = id;
         this.backdrop_path = backdrop_path;
@@ -149,11 +149,11 @@ public class GetTvShowCastMovieModel {
         this.poster_path = poster_path;
     }
 
-    public double getVote_average() {
+    public float getVote_average() {
         return vote_average;
     }
 
-    public void setVote_average(double vote_average) {
+    public void setVote_average(float vote_average) {
         this.vote_average = vote_average;
     }
 

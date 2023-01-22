@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.WindowManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView lottieHome;
     private LottieAnimationView lottieSearch;
     private LottieAnimationView lottieVideo;
-    private LottieAnimationView lottieFav;
+    public static LottieAnimationView lottieFav;
     private LottieAnimationView lottieProfile;
 
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adjustFontScale(getResources().getConfiguration());  //Lock font size of system setting
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -107,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void adjustFontScale(Configuration configuration)
+    {
+        configuration.fontScale = (float) 1.0;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        metrics.scaledDensity = configuration.fontScale * metrics.density;
+        getBaseContext().getResources().updateConfiguration(configuration, metrics);
     }
 
 

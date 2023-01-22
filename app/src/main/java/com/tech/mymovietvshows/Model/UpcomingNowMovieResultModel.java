@@ -11,7 +11,7 @@ public class UpcomingNowMovieResultModel {
     private String poster_path;
     private String title;
     private boolean video;
-    private Double vote_average;
+    private float vote_average;
     private Integer vote_count;
     private String original_title;
     private String release_date;
@@ -19,7 +19,7 @@ public class UpcomingNowMovieResultModel {
     public UpcomingNowMovieResultModel() {
     }
 
-    public UpcomingNowMovieResultModel(boolean adult, String backdrop_path, Integer id, String original_language, String overview, Double popularity, String poster_path, String title, boolean video, Double vote_average, Integer vote_count, String original_title, String release_date) {
+    public UpcomingNowMovieResultModel(boolean adult, String backdrop_path, Integer id, String original_language, String overview, Double popularity, String poster_path, String title, boolean video, float vote_average, Integer vote_count, String original_title, String release_date) {
         this.adult = adult;
         this.backdrop_path = backdrop_path;
         this.id = id;
@@ -112,11 +112,11 @@ public class UpcomingNowMovieResultModel {
         this.video = video;
     }
 
-    public Double getVote_average() {
+    public float getVote_average() {
         return vote_average;
     }
 
-    public void setVote_average(Double vote_average) {
+    public void setVote_average(float vote_average) {
         this.vote_average = vote_average;
     }
 

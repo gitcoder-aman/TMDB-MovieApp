@@ -485,7 +485,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         List<MovieDetailSpokenLanguage> movieDetailSpokenLanguageList = movieDetailModelResponse.getSpoken_languages();
-        if (movieDetailSpokenLanguageList != null) {
+        if (movieDetailSpokenLanguageList != null && !movieDetailSpokenLanguageList.isEmpty()) {
 
             detailLanguage.setText(Html.fromHtml("<b>" + "Language : " + "</b>" + "  " + movieDetailSpokenLanguageList.get(0).getEnglish_name()));
         }
@@ -515,52 +515,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
-//    private void prepareTvDetails(TvShowsDetailModelResult tvShowsDetailModelResultList) {
-//
-//        if (tvShowsDetailModelResultList.getPoster_path() != null) {
-//            Picasso.get()
-//                    .load(tvShowsDetailModelResultList.getBackdrop_path())
-//                    .placeholder(R.drawable.image_loading)
-//                    .into(detailBackdropPoster);
-//            backdropPosterLayout.setVisibility(View.VISIBLE);
-//        } else {
-//            backdropPosterLayout.setVisibility(View.GONE);
-//        }
-//
-//        if (tvShowsDetailModelResultList.getName() != null) {
-//            detailToolbar.setTitle(tvShowsDetailModelResultList.getName());
-//            detailMovie_title.setText(tvShowsDetailModelResultList.getName());
-//        }
-//
-//        if (tvShowsDetailModelResultList.getPoster_path() != null) {
-//            Picasso.get().load(tvShowsDetailModelResultList.getPoster_path())
-//                    .placeholder(R.drawable.image_loading)
-//                    .into(detailPosterImageView);
-//        }
-//        if (tvShowsDetailModelResultList.getVote_count() > 0) {
-//            detailVoteCount.setText("(" + tvShowsDetailModelResultList.getVote_count() + ")");
-//        } else {
-//            detailVoteCount.setText("(" + tvShowsDetailModelResultList.getVote_count() + ")");
-//            detailVoteCount.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.rating_blank, 0, 0, 0);
-//        }
-//        if (tvShowsDetailModelResultList.getVote_average() != null) {
-//            detailRating_no.setText(String.valueOf(tvShowsDetailModelResultList.getVote_average()));
-//        }
-//
-//        if (tvShowsDetailModelResultList.getOverview() != null) {
-//            detail_overview.setText(tvShowsDetailModelResultList.getOverview());
-//        }
-//        //information LL
-//        if (tvShowsDetailModelResultList.getFirst_air_date() != null) {
-//            detailReleaseDate.setText(Html.fromHtml("<b>" + "Release Date : " + "</b>" + "  " + tvShowsDetailModelResultList.getFirst_air_date()));
-//        }
-//
-//
-//
-//    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {  //When execute toolbar back pressed
         finish();
         return super.onOptionsItemSelected(item);

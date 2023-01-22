@@ -34,4 +34,6 @@
     <string name="now_playing">Now Playing</string>
     <string name="tv_shows_videos">Tv Shows Videos</string>
     <string name="on_tv_">On TV</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="empty_favorite_list">Empty Favorite List</string>
 </resources>

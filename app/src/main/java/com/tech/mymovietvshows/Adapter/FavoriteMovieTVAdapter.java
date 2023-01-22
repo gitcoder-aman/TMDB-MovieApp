@@ -21,8 +21,8 @@ import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Database.DatabaseHelper;
 import com.tech.mymovietvshows.Database.MovieTV;
+import com.tech.mymovietvshows.Fragment.FavoriteFragment;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
-import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
 
@@ -33,60 +33,48 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<TrendingPopularTopRatedRVAdapter.ViewHolder> {
+public class FavoriteMovieTVAdapter extends RecyclerView.Adapter<FavoriteMovieTVAdapter.viewHolder> {
 
     Context context;
-    List<TrendingPopularTopRatedMovieResultModel> trendingMovieResultModelList;
+    List<MovieTV> movieTVList;
 
-    public TrendingPopularTopRatedRVAdapter(Context context, List<TrendingPopularTopRatedMovieResultModel> trendingMovieResultModelList) {
+    public FavoriteMovieTVAdapter(Context context, List<MovieTV> movieTVList) {
         this.context = context;
-        this.trendingMovieResultModelList = trendingMovieResultModelList;
+        this.movieTVList = movieTVList;
     }
 
     @NonNull
     @Override
-    public TrendingPopularTopRatedRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoriteMovieTVAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.poster_rv_layout, parent, false);
-        return new ViewHolder(view);
+        return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrendingPopularTopRatedRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoriteMovieTVAdapter.viewHolder holder, int position) {
 
-        TrendingPopularTopRatedMovieResultModel trendingMovieResultModel = trendingMovieResultModelList.get(position);
-        Log.d("debug", trendingMovieResultModel.getPoster_path());
+        MovieTV movieTV = movieTVList.get(position);
 
-        int id = trendingMovieResultModel.getId();
-        String posterImage = trendingMovieResultModel.getPoster_path();
-        float rating = trendingMovieResultModel.getVote_average();
+        String movieName = movieTV.getMovieName();
+        String posterImage = movieTV.getPosterImage();
+        float rating = movieTV.getRating();
+        String releaseDate = movieTV.getReleaseDate();
+        int id = movieTV.getId();
 
-        String movieName;
-        if (trendingMovieResultModel.getOriginal_title() != null) {
-            movieName = trendingMovieResultModel.getOriginal_title();
-        } else {
-            movieName = trendingMovieResultModel.getName();
+        if (movieName != null) {
+            holder.movieName.setText(movieName);
         }
-        String releaseDate;
-        if (trendingMovieResultModel.getRelease_date() != null) {
-
-            releaseDate = trendingMovieResultModel.getRelease_date();
-        } else {
-            releaseDate = trendingMovieResultModel.getFirst_air_date();
+        if (posterImage != null) {
+            Picasso.get()
+                    .load(posterImage)
+                    .placeholder(R.drawable.image_loading)
+                    .into(holder.posterImageView);
         }
-
-        Picasso.get()
-                .load(posterImage)
-                .placeholder(R.drawable.image_loading)
-                .into(holder.posterImageView);
-
         holder.ratingNo.setText(String.valueOf(rating));
 
-
-        holder.movieName.setText(movieName);
-
-        holder.releaseDate.setText(releaseDate);
-        holder.releaseDate.setVisibility(View.VISIBLE);
+        if (releaseDate != null) {
+            holder.releaseDate.setText(releaseDate);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,12 +122,6 @@ public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<Trend
 
                     holder.favBtn.setText("Watchlisted");
                     holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-                    lottieFav.playAnimation();
-
-
-//                    for (int i = 0; i < arrayList.size(); i++) {
-//                        Log.d("data", "Title : " + arrayList.get(i).getMovieName() + "PosterLink : " + arrayList.get(i).getPosterImage());
-//                    }
 
                 } else {
                     //remove data from favorite database
@@ -152,7 +134,7 @@ public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<Trend
         });
 
         for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).getId() == trendingMovieResultModelList.get(position).getId()) {
+            if (arrayList.get(i).getId() == movieTVList.get(position).getId()) {
                 holder.favBtn.setText("Watchlisted");
                 holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
             }
@@ -160,17 +142,11 @@ public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<Trend
     }
 
     @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
     public int getItemCount() {
-        return trendingMovieResultModelList.size();
+        return movieTVList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
+    public static class viewHolder extends RecyclerView.ViewHolder {
         private final AppCompatImageView posterImageView;
         private final AppCompatTextView ratingNo;
         private final AppCompatTextView movieName;
@@ -179,7 +155,7 @@ public class TrendingPopularTopRatedRVAdapter extends RecyclerView.Adapter<Trend
         private final Button favBtn;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        public viewHolder(@NonNull View itemView) {
             super(itemView);
 
             posterImageView = itemView.findViewById(R.id.poster_imageView);

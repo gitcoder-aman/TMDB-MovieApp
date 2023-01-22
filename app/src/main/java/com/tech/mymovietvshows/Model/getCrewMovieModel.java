@@ -14,7 +14,7 @@ public class getCrewMovieModel {
     private String release_date;
     private String title;
     private boolean video;
-    private double vote_average;
+    private float vote_average;
     private long vote_count;
     private String department;
     private String job;
@@ -22,7 +22,7 @@ public class getCrewMovieModel {
     public getCrewMovieModel() {
     }
 
-    public getCrewMovieModel(boolean adult, String backdrop_path, String credit_id, Integer id, String original_language, String original_title, String overview, Double popularity, String poster_path, String release_date, String title, boolean video, double vote_average, long vote_count, String department, String job) {
+    public getCrewMovieModel(boolean adult, String backdrop_path, String credit_id, Integer id, String original_language, String original_title, String overview, Double popularity, String poster_path, String release_date, String title, boolean video, float vote_average, long vote_count, String department, String job) {
         this.adult = adult;
         this.backdrop_path = backdrop_path;
         this.credit_id = credit_id;
@@ -143,11 +143,11 @@ public class getCrewMovieModel {
         this.video = video;
     }
 
-    public double getVote_average() {
+    public float getVote_average() {
         return vote_average;
     }
 
-    public void setVote_average(double vote_average) {
+    public void setVote_average(float vote_average) {
         this.vote_average = vote_average;
     }
 
