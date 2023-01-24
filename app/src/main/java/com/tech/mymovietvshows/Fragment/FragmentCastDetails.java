@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 
 import com.tech.mymovietvshows.Adapter.CreditCastAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
@@ -33,6 +34,7 @@ import retrofit2.Response;
 public class FragmentCastDetails extends Fragment {
 
     private RecyclerView castRecyclerView;
+    private ProgressBar progressCastDetail;
 
     public FragmentCastDetails() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class FragmentCastDetails extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cast_details, container, false);
 
         castRecyclerView = view.findViewById(R.id.castRecyclerView);
+        progressCastDetail = view.findViewById(R.id.progressCastDetail);
 
         castRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -71,12 +74,16 @@ public class FragmentCastDetails extends Fragment {
                     MovieCreditsModel movieCreditModel = response.body();
 
                     if (movieCreditModel != null) {
+
+                        progressCastDetail.setVisibility(View.GONE);
+
                         List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
 
                         if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
                             CreditCastAdapter adapter = new CreditCastAdapter(getContext(), movieCreditsCastModelList);
                             castRecyclerView.setAdapter(adapter);
 
+                            castRecyclerView.setVisibility(View.VISIBLE);
                             //Create some animation view item loading
                             LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                             castRecyclerView.setLayoutAnimation(controller);
@@ -100,12 +107,16 @@ public class FragmentCastDetails extends Fragment {
                     MovieCreditsModel movieCreditModel = response.body();
 
                     if (movieCreditModel != null) {
+
+                        progressCastDetail.setVisibility(View.GONE);
+
                         List<MovieCreditsCastModel> movieCreditsCastModelList = movieCreditModel.getCast();
 
                         if (movieCreditsCastModelList != null && !movieCreditsCastModelList.isEmpty()) {
                             CreditCastAdapter adapter = new CreditCastAdapter(getContext(), movieCreditsCastModelList);
                             castRecyclerView.setAdapter(adapter);
 
+                            castRecyclerView.setVisibility(View.VISIBLE);
                             //Create some animation view item loading
                             LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                             castRecyclerView.setLayoutAnimation(controller);

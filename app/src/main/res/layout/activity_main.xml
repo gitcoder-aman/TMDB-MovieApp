@@ -63,10 +63,10 @@
                 android:layout_weight="1"/>
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/profileView"
+                android:id="@+id/peopleView"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                app:lottie_rawRes="@raw/user"
+                app:lottie_rawRes="@raw/people"
                 android:padding="17dp"
                 android:layout_weight="1" />
 

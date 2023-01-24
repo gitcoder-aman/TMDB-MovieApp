@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -57,6 +58,9 @@ public class PersonDetailActivity extends AppCompatActivity {
     private RecyclerView moviesRecycler;
     private RecyclerView tvShowsRecycler;
 
+    private ProgressBar progressDetailPerson;
+    private LinearLayoutCompat person_detailLayout;
+
     private Toolbar personToolbar;
 
     @Override
@@ -76,6 +80,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvShows_linearLayout = findViewById(R.id.TvShows_linearLayout);
         movie_seeAll = findViewById(R.id.movies_seeAll);
         tv_seeAll = findViewById(R.id.tv_seeAll);
+        progressDetailPerson = findViewById(R.id.progressDetailPerson);
+        person_detailLayout = findViewById(R.id.person_detailLayout);
 
         moviesRecycler = findViewById(R.id.moviesRecycler);
         tvShowsRecycler = findViewById(R.id.tvShowsRecycler);
@@ -99,6 +105,9 @@ public class PersonDetailActivity extends AppCompatActivity {
                 RetrofitInstance.getInstance().apiInterface.getPersonDetailById(person_id, api).enqueue(new Callback<PersonDetailModel>() {
                     @Override
                     public void onResponse(@NonNull Call<PersonDetailModel> call, @NonNull Response<PersonDetailModel> response) {
+
+                        progressDetailPerson.setVisibility(View.GONE);
+                        person_detailLayout.setVisibility(View.VISIBLE);
 
                         PersonDetailModel personDetailModel = response.body();
                         if (personDetailModel != null) {

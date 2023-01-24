@@ -1,5 +1,6 @@
 package com.tech.mymovietvshows.Fragment.Section;
 
+import static com.tech.mymovietvshows.Fragment.HomeFragment.pageHome;
 import static com.tech.mymovietvshows.MainActivity.api;
 
 import android.os.Bundle;
@@ -52,7 +53,7 @@ public class UpcomingFragment extends Fragment {
 
         upcomingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
-        RetrofitInstance.getInstance().apiInterface.getUpcomingMovie(api).enqueue(new Callback<UpcomingNowMovieModel>() {
+        RetrofitInstance.getInstance().apiInterface.getUpcomingMovie(api,pageHome).enqueue(new Callback<UpcomingNowMovieModel>() {
             @Override
             public void onResponse(@NonNull Call<UpcomingNowMovieModel> call, @NonNull Response<UpcomingNowMovieModel> response) {
 

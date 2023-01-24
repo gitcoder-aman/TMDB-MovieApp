@@ -10,7 +10,6 @@
     tools:context=".Fragment.HomeFragment"
     tools:openDrawer="start">
 
-
     <include
         android:id="@+id/appbar"
         layout="@layout/appbar_main"

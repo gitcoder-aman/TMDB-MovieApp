@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -81,6 +82,8 @@ public class TvShowsDetailActivity extends AppCompatActivity {
 
     private Toolbar detailToolbar;
 
+    private ProgressBar progressDetailTV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,7 @@ public class TvShowsDetailActivity extends AppCompatActivity {
         detail_overview = findViewById(R.id.detail_overview);
         detailLinearLayout = findViewById(R.id.detailLinearLayout);
         credit_seeAll = findViewById(R.id.credit_seeAll);
+        progressDetailTV = findViewById(R.id.progressDetailMovie);
 
         creditRecyclerView = findViewById(R.id.CreditRecyclerView);
         videoRecyclerView = findViewById(R.id.videoRecyclerView);
@@ -151,6 +155,9 @@ public class TvShowsDetailActivity extends AppCompatActivity {
                         .enqueue(new Callback<MovieDetailModel>() {
                             @Override
                             public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
+
+                                progressDetailTV.setVisibility(View.GONE);
+                                detailLinearLayout.setVisibility(View.VISIBLE);
 
                                 Log.d("debug", "On Response");
                                 MovieDetailModel tvDetailModelResponse = response.body();
@@ -379,6 +386,7 @@ public class TvShowsDetailActivity extends AppCompatActivity {
         if (movieDetailModelResponse.getOverview() != null) {
             detail_overview.setText(movieDetailModelResponse.getOverview());
         }
+
 
         //information LL
         if (movieDetailModelResponse.getRelease_date() != null) {

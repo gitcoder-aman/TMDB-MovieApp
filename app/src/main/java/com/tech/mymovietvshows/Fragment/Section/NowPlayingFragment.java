@@ -1,5 +1,6 @@
 package com.tech.mymovietvshows.Fragment.Section;
 
+import static com.tech.mymovietvshows.Fragment.HomeFragment.pageHome;
 import static com.tech.mymovietvshows.MainActivity.api;
 
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class NowPlayingFragment extends Fragment {
 
         nowPlayingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
-        RetrofitInstance.getInstance().apiInterface.getNowPlayingMovie(api).enqueue(new Callback<UpcomingNowMovieModel>() {
+        RetrofitInstance.getInstance().apiInterface.getNowPlayingMovie(api,pageHome).enqueue(new Callback<UpcomingNowMovieModel>() {
             @Override
             public void onResponse(@NonNull Call<UpcomingNowMovieModel> call, @NonNull Response<UpcomingNowMovieModel> response) {
 

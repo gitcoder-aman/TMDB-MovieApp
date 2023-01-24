@@ -11,11 +11,13 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tech.mymovietvshows.Adapter.VideoFragment.MovieFragTrendingPopularRatedAdapter;
@@ -53,6 +55,11 @@ public class VideoFragment extends Fragment {
     private AppCompatButton onTvBtn;
     private AppCompatButton popularTvBtn;
     private AppCompatButton topRatedTvBtn;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
+    private LinearLayoutCompat videoLayout;
+
+    private static int pageVideo = 1;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -71,6 +78,9 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_video, container, false);
+
+        videoLayout = view.findViewById(R.id.videoLayout);
+        progressBar = view.findViewById(R.id.progressVideo);
 
         recyclerViewVideo = view.findViewById(R.id.recyclerViewVideo);
         recyclerMovieVideo = view.findViewById(R.id.recyclerMovieVideo);
@@ -92,49 +102,36 @@ public class VideoFragment extends Fragment {
         popularTvBtn = view.findViewById(R.id.popularTvBtn);
         topRatedTvBtn = view.findViewById(R.id.topRatedTvBtn);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+
         recyclerViewVideo.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerMovieVideo.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerTvVideo.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
+        callFunctionAfterRefresh();
         movieBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-        //trending videos
-        RetrofitInstance.getInstance().apiInterface.getTrendingMovieDay(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+        popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+        airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
+
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+            public void onRefresh() {
 
-                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
-                if(trendingMovieVideoResponse != null){
-                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
+                pageVideo++;
+                callFunctionAfterRefresh();
+                swipeRefreshLayout.setRefreshing(false);
 
-                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
-
-                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
-                        recyclerViewVideo.setAdapter(adapter);
-                        trendingMovieLayout.setVisibility(View.VISIBLE);
-                    }else{
-                        trendingMovieLayout.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
-                    }
-
-                }else{
-                    trendingMovieLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("VideoFrag","On Response fail");
             }
         });
-
         movieBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onClick(View view) {
                 movieBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
                 tvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getTrendingMovieDay(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTrendingMovieDay(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -170,7 +167,7 @@ public class VideoFragment extends Fragment {
             public void onClick(View view) {
                 tvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
                 movieBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getTrendingTvDay(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTrendingTvDay(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -201,40 +198,6 @@ public class VideoFragment extends Fragment {
 
             }
         });
-
-        //popular videos
-        popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-        RetrofitInstance.getInstance().apiInterface.getPopularMovie(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
-            @Override
-            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
-
-                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
-                if(trendingMovieVideoResponse != null){
-                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
-
-                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
-
-                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
-                        recyclerMovieVideo.setAdapter(adapter);
-
-                        movieLayout.setVisibility(View.VISIBLE);
-                    }else{
-                        movieLayout.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
-                    }
-
-                }else{
-                    movieLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("VideoFrag","On Response fail");
-            }
-        });
-
         popularBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -242,7 +205,7 @@ public class VideoFragment extends Fragment {
                 nowPlayingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 upcomingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getPopularMovie(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getPopularMovie(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -282,7 +245,7 @@ public class VideoFragment extends Fragment {
                 popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 upcomingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
 
-                RetrofitInstance.getInstance().apiInterface.getNowPlayingMovie(api).enqueue(new Callback<UpcomingNowMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getNowPlayingMovie(api,pageVideo).enqueue(new Callback<UpcomingNowMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<UpcomingNowMovieModel> call, @NonNull Response<UpcomingNowMovieModel> response) {
 
@@ -314,7 +277,6 @@ public class VideoFragment extends Fragment {
                 });
             }
         });
-
         topRatedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -322,7 +284,7 @@ public class VideoFragment extends Fragment {
                 nowPlayingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 upcomingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getTopRatedMovie(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTopRatedMovie(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -362,7 +324,7 @@ public class VideoFragment extends Fragment {
                 nowPlayingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getUpcomingMovie(api).enqueue(new Callback<UpcomingNowMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getUpcomingMovie(api,pageVideo).enqueue(new Callback<UpcomingNowMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<UpcomingNowMovieModel> call, @NonNull Response<UpcomingNowMovieModel> response) {
 
@@ -394,40 +356,6 @@ public class VideoFragment extends Fragment {
                 });
             }
         });
-
-        //airing today video
-        airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-        RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
-            @Override
-            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
-
-                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
-                if(trendingMovieVideoResponse != null){
-                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
-
-                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
-
-                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
-                        recyclerTvVideo.setAdapter(adapter);
-
-                        tvLayout.setVisibility(View.VISIBLE);
-                    }else{
-                        tvLayout.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
-                    }
-
-                }else{
-                    movieLayout.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("VideoFrag","On Response fail");
-            }
-        });
-
         airingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -436,7 +364,7 @@ public class VideoFragment extends Fragment {
                 popularTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 topRatedTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
 
-                RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -475,7 +403,7 @@ public class VideoFragment extends Fragment {
                 airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 popularTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 topRatedTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getOnTheAirTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getOnTheAirTv(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -515,7 +443,7 @@ public class VideoFragment extends Fragment {
                 airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 onTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 topRatedTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getPopularTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getPopularTv(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -555,7 +483,7 @@ public class VideoFragment extends Fragment {
                 airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 onTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
                 popularTvBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -589,5 +517,107 @@ public class VideoFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void callFunctionAfterRefresh() {
+
+        //trending videos
+        RetrofitInstance.getInstance().apiInterface.getTrendingMovieDay(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+            @Override
+            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
+                if(trendingMovieVideoResponse != null){
+                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
+
+                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
+
+                        progressBar.setVisibility(View.GONE);
+                        videoLayout.setVisibility(View.VISIBLE);
+
+                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
+                        recyclerViewVideo.setAdapter(adapter);
+                        trendingMovieLayout.setVisibility(View.VISIBLE);
+                    }else{
+                        trendingMovieLayout.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    trendingMovieLayout.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                Log.d("VideoFrag","On Response fail");
+            }
+        });
+
+        //popular videos
+        RetrofitInstance.getInstance().apiInterface.getPopularMovie(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+            @Override
+            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
+                if(trendingMovieVideoResponse != null){
+                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
+
+                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
+
+                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
+                        recyclerMovieVideo.setAdapter(adapter);
+
+                        movieLayout.setVisibility(View.VISIBLE);
+                    }else{
+                        movieLayout.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    movieLayout.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                Log.d("VideoFrag","On Response fail");
+            }
+        });
+
+        //airing today video
+        RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api,pageVideo).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+            @Override
+            public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
+
+                TrendingPopularTopRatedMovieModel trendingMovieVideoResponse = response.body();
+                if(trendingMovieVideoResponse != null){
+                    List<TrendingPopularTopRatedMovieResultModel> trendingMovieVideoResultList = trendingMovieVideoResponse.getResults();
+
+                    if(trendingMovieVideoResultList != null && !trendingMovieVideoResultList.isEmpty()){
+
+                        MovieFragTrendingPopularRatedAdapter adapter = new MovieFragTrendingPopularRatedAdapter(getContext(),trendingMovieVideoResultList);
+                        recyclerTvVideo.setAdapter(adapter);
+
+                        tvLayout.setVisibility(View.VISIBLE);
+                    }else{
+                        tvLayout.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Movie not available", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    movieLayout.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"Movie is null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
+                Log.d("VideoFrag","On Response fail");
+            }
+        });
+
     }
 }

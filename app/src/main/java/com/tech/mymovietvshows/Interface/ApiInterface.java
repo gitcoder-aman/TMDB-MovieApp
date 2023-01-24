@@ -7,6 +7,7 @@ import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.MovieResponse;
 import com.tech.mymovietvshows.Model.MovieVideosModel;
 import com.tech.mymovietvshows.Model.PersonDetailModel;
+import com.tech.mymovietvshows.Model.PopularPersonModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
 import com.tech.mymovietvshows.Model.UpcomingNowMovieModel;
 import com.tech.mymovietvshows.Model.getCreditMovieModel;
@@ -19,19 +20,19 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     @GET("trending/movie/day")
-    Call<TrendingPopularTopRatedMovieModel> getTrendingMovie(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getTrendingMovie(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("movie/popular")
-    Call<TrendingPopularTopRatedMovieModel> getPopularMovie(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getPopularMovie(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("movie/upcoming")
-    Call<UpcomingNowMovieModel> getUpcomingMovie(@Query("api_key") String api_key);
+    Call<UpcomingNowMovieModel> getUpcomingMovie(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("movie/now_playing")
-    Call<UpcomingNowMovieModel> getNowPlayingMovie(@Query("api_key") String api_key);
+    Call<UpcomingNowMovieModel> getNowPlayingMovie(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("movie/top_rated")
-    Call<TrendingPopularTopRatedMovieModel> getTopRatedMovie(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getTopRatedMovie(@Query("api_key") String api_key, @Query("page") int page);
 
     //create a Service for movie Details
 
@@ -80,22 +81,22 @@ public interface ApiInterface {
     Call<MovieResponse> getTvByQuery(@Query("api_key") String api_key, @Query("query") String query);
 
     @GET("trending/movie/day")
-    Call<TrendingPopularTopRatedMovieModel> getTrendingMovieDay(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getTrendingMovieDay(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("trending/tv/day")
-    Call<TrendingPopularTopRatedMovieModel> getTrendingTvDay(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getTrendingTvDay(@Query("api_key") String api_key,@Query("page") int page);
 
     @GET("tv/popular")
-    Call<TrendingPopularTopRatedMovieModel> getPopularTv(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getPopularTv(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("tv/airing_today")
-    Call<TrendingPopularTopRatedMovieModel> getAiringTodayTv(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getAiringTodayTv(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("tv/on_the_air")
-    Call<TrendingPopularTopRatedMovieModel> getOnTheAirTv(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getOnTheAirTv(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("tv/top_rated")
-    Call<TrendingPopularTopRatedMovieModel> getTopRatedTv(@Query("api_key") String api_key);
+    Call<TrendingPopularTopRatedMovieModel> getTopRatedTv(@Query("api_key") String api_key, @Query("page") int page);
 
     @GET("tv/{tv_id}/recommendations")
     Call<TrendingPopularTopRatedMovieModel> getRecommendationsTvShowById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
@@ -110,6 +111,9 @@ public interface ApiInterface {
 
     @GET("tv/{tv_id}/credits")
     Call<MovieCreditsModel> getTvShowsCreditsById(@Path("tv_id") int tv_id, @Query("api_key") String api_key);
+
+    @GET("person/popular")
+    Call<PopularPersonModel> getPopularPeople(@Query("api_key") String api_key, @Query("page") int page);
 
 
 }

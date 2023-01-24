@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -42,6 +43,9 @@ public class CollectionDetailActivity extends AppCompatActivity {
     private AppCompatTextView collectionOverview;
     private AppCompatImageView collectionPosterImage;
 
+    private LinearLayoutCompat detailCollectionLayout;
+    private ProgressBar progressCollection;
+
     private RecyclerView includeRecyclerView;
 
     @Override
@@ -55,6 +59,8 @@ public class CollectionDetailActivity extends AppCompatActivity {
         collectionMovieName = findViewById(R.id.collectionMovieName);
         collectionOverview = findViewById(R.id.collectionOverview);
         collectionPosterImage = findViewById(R.id.collectionPosterImage);
+        progressCollection = findViewById(R.id.progressCollection);
+        detailCollectionLayout = findViewById(R.id.detailCollectionLayout);
 
         includeRecyclerView = findViewById(R.id.include_recyclerView);
 
@@ -83,6 +89,10 @@ public class CollectionDetailActivity extends AppCompatActivity {
                         MovieCollectionModel movieCollectionModel = response.body();
 
                         if (movieCollectionModel != null) {
+
+                            progressCollection.setVisibility(View.GONE);
+                            detailCollectionLayout.setVisibility(View.VISIBLE);
+
                             toolbar.setTitle(movieCollectionModel.getName());
                             if (movieCollectionModel.getName() != null) {
                                 collectionMovieName.setText(movieCollectionModel.getName());
@@ -104,8 +114,11 @@ public class CollectionDetailActivity extends AppCompatActivity {
                                     .into(collectionPosterImage);
 
                             List<UpcomingNowMovieResultModel>collectionPartList = movieCollectionModel.getParts();
-                            CollectionIncludeRVAdapter adapter = new CollectionIncludeRVAdapter(CollectionDetailActivity.this,collectionPartList);
-                            includeRecyclerView.setAdapter(adapter);
+                            if(collectionPartList != null && !collectionPartList.isEmpty()){
+
+                                CollectionIncludeRVAdapter adapter = new CollectionIncludeRVAdapter(CollectionDetailActivity.this,collectionPartList);
+                                includeRecyclerView.setAdapter(adapter);
+                            }
 
                         } else {
                             Toast.makeText(CollectionDetailActivity.this, "Collection is NULL", Toast.LENGTH_SHORT).show();

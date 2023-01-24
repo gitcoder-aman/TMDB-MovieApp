@@ -19,7 +19,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import com.tech.mymovietvshows.Fragment.FavoriteFragment;
 import com.tech.mymovietvshows.Fragment.HomeFragment;
-import com.tech.mymovietvshows.Fragment.ProfileFragment;
+import com.tech.mymovietvshows.Fragment.PeopleFragment;
 import com.tech.mymovietvshows.Fragment.SearchFragment;
 import com.tech.mymovietvshows.Fragment.VideoFragment;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView lottieSearch;
     private LottieAnimationView lottieVideo;
     public static LottieAnimationView lottieFav;
-    private LottieAnimationView lottieProfile;
+    private LottieAnimationView lottiePeople;
 
 
     public static String api = "ac28a3498de90c46b11f31bda02b8b97";
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         lottieSearch = findViewById(R.id.searchView);
         lottieVideo = findViewById(R.id.videoView);
         lottieFav = findViewById(R.id.favorateView);
-        lottieProfile = findViewById(R.id.profileView);
+        lottiePeople = findViewById(R.id.peopleView);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     lottieSearch.pauseAnimation();
                     lottieVideo.pauseAnimation();
                     lottieFav.pauseAnimation();
-                    lottieProfile.pauseAnimation();
+                    lottiePeople.pauseAnimation();
 
                     loadFragment(new HomeFragment());
                 } else if (id == R.id.nav_search) {
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     lottieHome.pauseAnimation();
                     lottieVideo.pauseAnimation();
                     lottieFav.pauseAnimation();
-                    lottieProfile.pauseAnimation();
+                    lottiePeople.pauseAnimation();
 
                     loadFragment(new SearchFragment());
                 } else if (id == R.id.nav_videos) {
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     lottieSearch.pauseAnimation();
                     lottieHome.pauseAnimation();
                     lottieFav.pauseAnimation();
-                    lottieProfile.pauseAnimation();
+                    lottiePeople.pauseAnimation();
 
                     loadFragment(new VideoFragment());
                 } else if (id == R.id.nav_favorate) {
@@ -93,18 +93,18 @@ public class MainActivity extends AppCompatActivity {
                     lottieSearch.pauseAnimation();
                     lottieVideo.pauseAnimation();
                     lottieHome.pauseAnimation();
-                    lottieProfile.pauseAnimation();
+                    lottiePeople.pauseAnimation();
 
                     loadFragment(new FavoriteFragment());
-                } else if(id == R.id.nav_profile){
-                    lottieProfile.playAnimation();
+                } else if(id == R.id.nav_people){
+                    lottiePeople.playAnimation();
 
                     lottieSearch.pauseAnimation();
                     lottieVideo.pauseAnimation();
                     lottieFav.pauseAnimation();
                     lottieHome.pauseAnimation();
 
-                    loadFragment(new ProfileFragment());
+                    loadFragment(new PeopleFragment());
                 }
 
                 return true;

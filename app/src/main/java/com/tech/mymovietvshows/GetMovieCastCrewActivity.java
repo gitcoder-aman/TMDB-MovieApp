@@ -2,6 +2,7 @@ package com.tech.mymovietvshows;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.google.android.material.tabs.TabLayout;
 import com.tech.mymovietvshows.Adapter.ViewPagerCastCrewAdapter;

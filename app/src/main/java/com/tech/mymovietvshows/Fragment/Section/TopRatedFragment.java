@@ -1,5 +1,6 @@
 package com.tech.mymovietvshows.Fragment.Section;
 
+import static com.tech.mymovietvshows.Fragment.HomeFragment.pageHome;
 import static com.tech.mymovietvshows.MainActivity.api;
 
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class TopRatedFragment extends Fragment {
         topRatedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
 
-        RetrofitInstance.getInstance().apiInterface.getTopRatedMovie(api)
+        RetrofitInstance.getInstance().apiInterface.getTopRatedMovie(api,pageHome)
                 .enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {

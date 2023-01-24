@@ -1,5 +1,8 @@
 package com.tech.mymovietvshows.Fragment.Section;
 
+import static com.tech.mymovietvshows.Fragment.HomeFragment.homeLayout;
+import static com.tech.mymovietvshows.Fragment.HomeFragment.pageHome;
+import static com.tech.mymovietvshows.Fragment.HomeFragment.progressBarHome;
 import static com.tech.mymovietvshows.MainActivity.api;
 
 import android.os.Bundle;
@@ -18,7 +21,6 @@ import android.view.animation.LayoutAnimationController;
 
 import com.tech.mymovietvshows.Adapter.TrendingPopularTopRatedRVAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
-import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieModel;
 import com.tech.mymovietvshows.Model.TrendingPopularTopRatedMovieResultModel;
 import com.tech.mymovietvshows.R;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 
 public class TrendingFragment extends Fragment {
 
-    private RecyclerView trendingRecyclerView;
+    public static RecyclerView trendingRecyclerView;
 
     public TrendingFragment() {
         // Required empty public constructor
@@ -56,7 +58,7 @@ public class TrendingFragment extends Fragment {
         trendingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
 
-        RetrofitInstance.getInstance().apiInterface.getTrendingMovie(api)
+        RetrofitInstance.getInstance().apiInterface.getTrendingMovie(api,pageHome)
                 .enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
@@ -70,6 +72,8 @@ public class TrendingFragment extends Fragment {
 
                             if (trendingMovieResultModelList != null && !trendingMovieResultModelList.isEmpty()) {
 
+                                progressBarHome.setVisibility(View.GONE);
+                                homeLayout.setVisibility(View.VISIBLE);
                                 TrendingPopularTopRatedRVAdapter trendingRVAdapter = new TrendingPopularTopRatedRVAdapter(getContext(),trendingMovieResultModelList);
                                 trendingRecyclerView.setAdapter(trendingRVAdapter);
 

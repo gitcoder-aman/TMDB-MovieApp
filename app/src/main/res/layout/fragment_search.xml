@@ -18,7 +18,7 @@
             android:id="@+id/toolbarSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white_dark"
+            android:background="@color/black"
             app:title="Search"
             android:layout_weight="1"
             app:titleTextColor="@color/white" />
@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:id="@+id/searchBtn"
             android:src="@drawable/ic_search"
-            android:background="@color/white_dark" />
+            android:background="@color/black" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

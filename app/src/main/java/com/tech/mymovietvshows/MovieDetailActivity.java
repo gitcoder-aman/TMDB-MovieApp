@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -89,7 +90,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private LinearLayoutCompat infoLinearLayout;
     private LinearLayoutCompat posterDetailLL;
 
+    private AppCompatTextView runtime;
+
     private Toolbar detailToolbar;
+    private ProgressBar progressDetailMovie;
 
 
     @Override
@@ -107,8 +111,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         detailGenresRV = findViewById(R.id.detailGenresRV);
         detail_overview = findViewById(R.id.detail_overview);
         detailLinearLayout = findViewById(R.id.detailLinearLayout);
+        progressDetailMovie = findViewById(R.id.progressDetailMovie);
         collectionTextview = findViewById(R.id.collectionTextview);
         credit_seeAll = findViewById(R.id.credit_seeAll);
+        runtime = findViewById(R.id.detail_runtime);
 
         detailCollectionPoster = findViewById(R.id.detailCollectionPoster);
         detailCollectionName = findViewById(R.id.detailCollectionName);
@@ -167,6 +173,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                         .enqueue(new Callback<MovieDetailModel>() {
                             @Override
                             public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
+
+                                progressDetailMovie.setVisibility(View.GONE);
+                                detailLinearLayout.setVisibility(View.VISIBLE);
 
                                 Log.d("debug", "On Response");
                                 MovieDetailModel movieDetailModelResponse = response.body();
@@ -477,6 +486,17 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         if (movieDetailModelResponse.getOverview() != null) {
             detail_overview.setText(movieDetailModelResponse.getOverview());
+        }
+        if(movieDetailModelResponse.getRuntime() != null){
+
+            int runT = movieDetailModelResponse.getRuntime();
+
+            int hours = (runT/60);
+            int minutes = runT%60;
+
+            String time = hours +"h " + minutes + "m";
+            runtime.setText(time);
+            runtime.setVisibility(View.VISIBLE);
         }
 
         //information LL

@@ -25,6 +25,7 @@ public class MovieCreditActivity extends AppCompatActivity {
     private int id;
     private String creditType;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

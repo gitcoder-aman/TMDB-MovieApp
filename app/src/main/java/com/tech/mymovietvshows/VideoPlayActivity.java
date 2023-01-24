@@ -4,6 +4,7 @@ package com.tech.mymovietvshows;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -36,6 +38,8 @@ public class VideoPlayActivity extends AppCompatActivity {
 
     private YouTubePlayerView youTubePlayerView;
     private RecyclerView otherVideoRecyclerView;
+    private ProgressBar progressPlay;
+    private LinearLayoutCompat video_player_layout;
     private com.tech.mymovietvshows.Utils.FullScreenHelper fullScreenHelper;
 
     @Override
@@ -52,6 +56,8 @@ public class VideoPlayActivity extends AppCompatActivity {
 
         AppCompatTextView videoTitle = findViewById(R.id.play_video_title);
         AppCompatTextView noResultFound = findViewById(R.id.no_result_found);
+        progressPlay =findViewById(R.id.progressPlay);
+        video_player_layout = findViewById(R.id.video_player_layout);
 
         otherVideoRecyclerView = findViewById(R.id.other_videos_recyclerView);
 
@@ -64,11 +70,13 @@ public class VideoPlayActivity extends AppCompatActivity {
             ArrayList<MovieVideosResults>movieVideosModelArrayList = intent.getExtras().getParcelableArrayList("video");
             int position = Integer.parseInt(intent.getExtras().getString("position"));
 
-
             if(movieVideosModelArrayList != null && !movieVideosModelArrayList.isEmpty()){
 
                 String videoKey = movieVideosModelArrayList.get(position).getKey();
                 String title = movieVideosModelArrayList.get(position).getName();
+
+                progressPlay.setVisibility(View.GONE);
+                video_player_layout.setVisibility(View.VISIBLE);
 
 
                 if (videoKey != null) {

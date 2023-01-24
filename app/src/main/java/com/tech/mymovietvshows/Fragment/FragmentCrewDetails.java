@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 
 import com.tech.mymovietvshows.Adapter.CreditCrewAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
@@ -32,6 +33,7 @@ import retrofit2.Response;
 public class FragmentCrewDetails extends Fragment {
 
     private RecyclerView crewRecyclerView;
+    private ProgressBar progressCrewDetail;
 
     public FragmentCrewDetails() {
         // Required empty public constructor
@@ -58,6 +60,7 @@ public class FragmentCrewDetails extends Fragment {
         View view  =  inflater.inflate(R.layout.fragment_crew_details, container, false);
 
         crewRecyclerView = view.findViewById(R.id.crewRecyclerView);
+        progressCrewDetail = view.findViewById(R.id.progressCrewDetail);
 
         crewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -68,12 +71,16 @@ public class FragmentCrewDetails extends Fragment {
 
                     MovieCreditsModel movieCreditModel = response.body();
 
+                    progressCrewDetail.setVisibility(View.GONE);
+
                     if (movieCreditModel != null) {
                         List<MovieCreditsCrewModel> movieCreditsCrewModelList = movieCreditModel.getCrew();
 
                         if (movieCreditsCrewModelList != null && !movieCreditsCrewModelList.isEmpty()) {
                             CreditCrewAdapter adapter = new CreditCrewAdapter(getContext(), movieCreditsCrewModelList);
                             crewRecyclerView.setAdapter(adapter);
+
+                            crewRecyclerView.setVisibility(View.VISIBLE);
 
                             //Create some animation view item loading
                             LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
@@ -97,12 +104,15 @@ public class FragmentCrewDetails extends Fragment {
                     MovieCreditsModel movieCreditModel = response.body();
 
                     if (movieCreditModel != null) {
+
+                        progressCrewDetail.setVisibility(View.GONE);
                         List<MovieCreditsCrewModel> movieCreditsCrewModelList = movieCreditModel.getCrew();
 
                         if (movieCreditsCrewModelList != null && !movieCreditsCrewModelList.isEmpty()) {
                             CreditCrewAdapter adapter = new CreditCrewAdapter(getContext(), movieCreditsCrewModelList);
                             crewRecyclerView.setAdapter(adapter);
 
+                            crewRecyclerView.setVisibility(View.VISIBLE);
                             //Create some animation view item loading
                             LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_slide_right);
                             crewRecyclerView.setLayoutAnimation(controller);

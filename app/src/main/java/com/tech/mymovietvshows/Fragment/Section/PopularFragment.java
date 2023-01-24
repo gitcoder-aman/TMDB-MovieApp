@@ -1,5 +1,6 @@
 package com.tech.mymovietvshows.Fragment.Section;
 
+import static com.tech.mymovietvshows.Fragment.HomeFragment.pageHome;
 import static com.tech.mymovietvshows.MainActivity.api;
 
 import android.os.Bundle;
@@ -52,7 +53,7 @@ public class PopularFragment extends Fragment {
         popularRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
 
-        RetrofitInstance.getInstance().apiInterface.getPopularMovie(api)
+        RetrofitInstance.getInstance().apiInterface.getPopularMovie(api,pageHome)
                 .enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {

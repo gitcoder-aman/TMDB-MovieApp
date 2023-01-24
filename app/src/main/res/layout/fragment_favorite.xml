@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/watchlistToolbar"
         app:title="Favorite List"
-        android:background="@color/white_dark"
+        android:background="@color/black"
+        app:layout_collapseMode="pin"
         app:titleTextColor="@color/white"/>
 
     <androidx.appcompat.widget.AppCompatTextView
