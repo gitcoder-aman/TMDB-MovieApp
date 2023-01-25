@@ -333,7 +333,6 @@ public class HomeFragment extends Fragment {
                 int id = item.getItemId();
 
                 if (id == R.id.nav_share) {
-                    Toast.makeText(getContext(), "share", Toast.LENGTH_SHORT).show();
 
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);

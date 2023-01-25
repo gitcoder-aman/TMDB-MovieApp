@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -31,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView lottieVideo;
     public static LottieAnimationView lottieFav;
     private LottieAnimationView lottiePeople;
-
-
 
     public static String api = "ac28a3498de90c46b11f31bda02b8b97";
 
@@ -129,5 +130,35 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameContainer, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        //new AlertDialog.Builder(MainActivity.this)
+        builder.setIcon(R.drawable.ic_report);
+        builder.setTitle("Exit");
+        builder.setMessage("Are you sure you want to exit this App?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //end the app
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
+            }
+        });
+
+//        builder.setPositiveButton(getResources().getDrawable(R.drawable.i))
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+
     }
 }

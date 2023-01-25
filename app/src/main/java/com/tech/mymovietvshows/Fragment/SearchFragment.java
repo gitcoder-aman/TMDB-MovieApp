@@ -214,14 +214,13 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-
-    public String callQueryFromFragment(){
-        if(queryEditText.getText().toString() != null) {
-            Toast.makeText(getContext(), queryEditText.getText().toString(), Toast.LENGTH_SHORT).show();
-            return queryEditText.getText().toString();
-        }else{
-            Toast.makeText(getContext(), "null", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-    }
+//    public String callQueryFromFragment(){
+//        if(queryEditText.getText().toString() != null) {
+//            Toast.makeText(getContext(), queryEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+//            return queryEditText.getText().toString();
+//        }else{
+//            Toast.makeText(getContext(), "null", Toast.LENGTH_SHORT).show();
+//            return null;
+//        }
+//    }
 }

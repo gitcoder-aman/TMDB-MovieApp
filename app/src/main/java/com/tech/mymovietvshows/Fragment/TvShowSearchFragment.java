@@ -20,6 +20,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
 import com.tech.mymovietvshows.Adapter.SearchMovieAdapter;
+import com.tech.mymovietvshows.Adapter.SearchTVAdapter;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Model.MovieResponse;
 import com.tech.mymovietvshows.Model.MovieResponseResults;
@@ -68,7 +69,7 @@ public class TvShowSearchFragment extends Fragment {
 
                     if(movieResponseResultsList != null && !movieResponseResultsList.isEmpty()){
 
-                        SearchMovieAdapter adapter =  new SearchMovieAdapter(getContext(),movieResponseResultsList);
+                        SearchTVAdapter adapter =  new SearchTVAdapter(getContext(),movieResponseResultsList);
                         recyclerView.setAdapter(adapter);
 
                         //Create some animation view item loading

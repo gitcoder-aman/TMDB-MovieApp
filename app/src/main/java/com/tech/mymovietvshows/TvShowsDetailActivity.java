@@ -394,7 +394,7 @@ public class TvShowsDetailActivity extends AppCompatActivity {
         }
 
         List<MovieDetailSpokenLanguage> movieDetailSpokenLanguageList = movieDetailModelResponse.getSpoken_languages();
-        if (movieDetailSpokenLanguageList != null) {
+        if (movieDetailSpokenLanguageList != null && !movieDetailSpokenLanguageList.isEmpty()) {
 
             detailLanguage.setText(Html.fromHtml("<b>" + "Language : " + "</b>" + "  " + movieDetailSpokenLanguageList.get(0).getEnglish_name()));
         }

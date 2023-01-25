@@ -1,6 +1,7 @@
 package com.tech.mymovietvshows.Adapter;
 
 import static com.tech.mymovietvshows.MainActivity.api;
+import static com.tech.mymovietvshows.MainActivity.lottieFav;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
+import com.tech.mymovietvshows.Database.DatabaseHelper;
+import com.tech.mymovietvshows.Database.MovieTV;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.MovieResponseResults;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,25 +55,38 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
 
         MovieResponseResults movieResponseResults = movieResponseResultsList.get(position);
 
-        if (movieResponseResults != null) {
-            Picasso.get()
-                    .load(movieResponseResults.getPoster_path())
-                    .placeholder(R.drawable.image_loading)
-                    .into(holder.posterImageView);
+        int id = movieResponseResults.getId();
 
-            holder.ratingNo.setText(String.valueOf(movieResponseResults.getVote_average()));
-
-            if (movieResponseResults.getTitle() != null) {
-                holder.movieName.setText(movieResponseResults.getTitle());
-            } else {
-                holder.movieName.setText(movieResponseResults.getName());
-            }
-            if(movieResponseResults.getRelease_date()!=null){
-            holder.releaseDate.setText(movieResponseResults.getRelease_date());
-            }else{
-                holder.releaseDate.setText(movieResponseResults.getFirst_air_date());
-            }
+        String movieName;
+        if (movieResponseResults.getTitle() != null) {
+            movieName = movieResponseResults.getTitle();
+        } else {
+            movieName = movieResponseResults.getName();
         }
+
+        String posterImage = movieResponseResults.getPoster_path();
+
+        String releaseDate;
+        if (movieResponseResults.getRelease_date() != null) {
+            releaseDate = movieResponseResults.getRelease_date();
+        } else {
+            releaseDate = movieResponseResults.getFirst_air_date();
+        }
+        float rating = movieResponseResults.getVote_average();
+
+        holder.movieName.setText(movieName);
+
+        Picasso.get()
+                .load(posterImage)
+                .placeholder(R.drawable.image_loading)
+                .into(holder.posterImageView);
+
+        holder.ratingNo.setText(String.valueOf(rating));
+
+        if (releaseDate != null) {
+            holder.releaseDate.setText(releaseDate);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +118,40 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
 
             }
         });
+
+        DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
+
+        ArrayList<MovieTV> arrayList = (ArrayList<MovieTV>) databaseHelper.movieTVDAO().getAllMovieTV();
+        //favorite button work
+        holder.favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (holder.favBtn.getText().toString().equals("Watchlist")) {
+
+                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate, "movie"));
+
+                    holder.favBtn.setText("Watchlisted");
+                    holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                    lottieFav.playAnimation();
+
+
+                } else {
+                    //remove data from favorite database
+                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate, "movie"));
+
+                    holder.favBtn.setText("Watchlist");
+                    holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);
+                }
+            }
+        });
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (arrayList.get(i).getId() == movieResponseResults.getId()) {
+                holder.favBtn.setText("Watchlisted");
+                holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+            }
+        }
     }
 
     @Override
@@ -112,6 +164,7 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
         private final AppCompatTextView ratingNo;
         private final AppCompatTextView movieName;
         private final AppCompatTextView releaseDate;
+        private final AppCompatButton favBtn;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,6 +173,7 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
             ratingNo = itemView.findViewById(R.id.rating_no);
             movieName = itemView.findViewById(R.id.movie_name);
             releaseDate = itemView.findViewById(R.id.releaseDate);
+            favBtn = itemView.findViewById(R.id.favoriteBtn);
         }
     }
 }
