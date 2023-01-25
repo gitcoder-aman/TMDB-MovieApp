@@ -56,7 +56,7 @@ public class VideoPlayActivity extends AppCompatActivity {
 
         AppCompatTextView videoTitle = findViewById(R.id.play_video_title);
         AppCompatTextView noResultFound = findViewById(R.id.no_result_found);
-        progressPlay =findViewById(R.id.progressPlay);
+        progressPlay = findViewById(R.id.progressPlay);
         video_player_layout = findViewById(R.id.video_player_layout);
 
         otherVideoRecyclerView = findViewById(R.id.other_videos_recyclerView);
@@ -65,12 +65,12 @@ public class VideoPlayActivity extends AppCompatActivity {
 
         //Now get the arrayList and position
 
-        if(intent != null && intent.getExtras() != null){
+        if (intent != null && intent.getExtras() != null) {
 
-            ArrayList<MovieVideosResults>movieVideosModelArrayList = intent.getExtras().getParcelableArrayList("video");
+            ArrayList<MovieVideosResults> movieVideosModelArrayList = intent.getExtras().getParcelableArrayList("video");
             int position = Integer.parseInt(intent.getExtras().getString("position"));
 
-            if(movieVideosModelArrayList != null && !movieVideosModelArrayList.isEmpty()){
+            if (movieVideosModelArrayList != null && !movieVideosModelArrayList.isEmpty()) {
 
                 String videoKey = movieVideosModelArrayList.get(position).getKey();
                 String title = movieVideosModelArrayList.get(position).getName();
@@ -150,12 +150,15 @@ public class VideoPlayActivity extends AppCompatActivity {
                         noResultFound.setVisibility(View.VISIBLE);
                     }
                 }
-                if(title != null)
-                videoTitle.setText(title);
+
+                if (title != null) {
+                    videoTitle.setText(title);
+                }
 
             }
         }
     }
+
     //exit the full screen on back pressed
     @Override
     public void onBackPressed() {

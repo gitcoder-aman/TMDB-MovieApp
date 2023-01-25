@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView lottiePeople;
 
 
+
     public static String api = "ac28a3498de90c46b11f31bda02b8b97";
 
     @Override
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     lottiePeople.pauseAnimation();
 
                     loadFragment(new VideoFragment());
-                } else if (id == R.id.nav_favorate) {
+                } else if (id == R.id.nav_favorite) {
                     lottieFav.playAnimation();
 
                     lottieSearch.pauseAnimation();

@@ -13,12 +13,18 @@
         android:layout_height="?attr/actionBarSize"
         app:title="Movies"
         app:titleTextColor="@color/white"
-        android:id="@+id/creditToolbar"/>
+        android:id="@+id/creditToolbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/creditToolbar">
+        android:layout_below="@id/creditToolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

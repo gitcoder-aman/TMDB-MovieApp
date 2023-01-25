@@ -76,5 +76,8 @@ dependencies {
     //swipe refresh layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    //Rating in App dependence
+    implementation 'com.google.android.play:core:1.10.3'
+
 
 }

@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/nav_home"
-        android:title="Home"/>
+        android:title="@string/home" />
 
     <item android:id="@+id/nav_search"
-        android:title="Search" />
+        android:title="@string/search" />
 
     <item android:id="@+id/nav_videos"
-        android:title="Videos" />
+        android:title="@string/videos" />
 
-    <item android:id="@+id/nav_favorate"
-        android:title="Favorites"/>
+    <item android:id="@+id/nav_favorite"
+        android:title="@string/favorite" />
 
     <item android:id="@+id/nav_people"
-        android:title="People"/>
+        android:title="@string/people" />
 </menu>

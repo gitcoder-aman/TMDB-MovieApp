@@ -4,6 +4,8 @@ import static com.tech.mymovietvshows.Fragment.Section.TrendingFragment.trending
 import static com.tech.mymovietvshows.MainActivity.api;
 import static com.tech.mymovietvshows.MainActivity.bottomNavigationView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +40,10 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 import com.tech.mymovietvshows.Adapter.PopularRatedTVShowRVAdapter;
 import com.tech.mymovietvshows.Adapter.TrendingPopularTopRatedRVAdapter;
 import com.tech.mymovietvshows.Adapter.ViewPagerAdapter;
@@ -76,6 +82,11 @@ public class HomeFragment extends Fragment {
     public static SwipeRefreshLayout swipeRefreshLayout;
     public static int pageHome = 1;
 
+    //for rating by user
+    private ReviewInfo reviewInfo;
+    private ReviewManager manager;
+
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -113,6 +124,8 @@ public class HomeFragment extends Fragment {
         tvRecyclerView = view.findViewById(R.id.tvRecyclerView);
 
         swipeRefreshLayout = view.findViewById(R.id.refreshLayout);
+
+        activateReviewInfo();
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
@@ -155,19 +168,19 @@ public class HomeFragment extends Fragment {
                             String finalQuery = query.replace(" ", "+");   //all space character convert into concat the string.
                             Log.d("debug", finalQuery);
 
-                            SearchFragment fragment = new SearchFragment ();
+                            SearchFragment fragment = new SearchFragment();
                             Bundle args = new Bundle();
-                            args.putString("finalQuery",finalQuery);
+                            args.putString("finalQuery", finalQuery);
                             fragment.setArguments(args);
 
                             bottomNavigationView.setSelectedItemId(R.id.nav_search);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.frameContainer, fragment ); // give your fragment container id in first parameter
+                            transaction.replace(R.id.frameContainer, fragment); // give your fragment container id in first parameter
                             transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
                             transaction.commit();
 
                         }
-                        Log.d("HomeQuery",query);
+                        Log.d("HomeQuery", query);
                     }
                     return true;
                 }
@@ -177,17 +190,17 @@ public class HomeFragment extends Fragment {
 
         callFunctionAfterRefresh();
         //for on TV Shows
-        tvRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        tvRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
 
         popularBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
+                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
 
-                RetrofitInstance.getInstance().apiInterface.getPopularTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getPopularTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -199,7 +212,7 @@ public class HomeFragment extends Fragment {
 
                             if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
 
                                 tvRecyclerView.setAdapter(TPRVAdapter);
 
@@ -211,14 +224,14 @@ public class HomeFragment extends Fragment {
                             } else {
                                 Log.d("debug", "Null List");
                             }
-                        }else{
+                        } else {
                             Log.d("debug", "Model NULL");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                        Log.d("homeTv","On Response fail");
+                        Log.d("homeTv", "On Response fail");
                     }
                 });
 
@@ -229,10 +242,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
+                topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
 
-                RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -244,7 +257,7 @@ public class HomeFragment extends Fragment {
 
                             if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
                                 tvRecyclerView.setAdapter(TPRVAdapter);
 
                                 //Create some animation view item loading
@@ -255,14 +268,14 @@ public class HomeFragment extends Fragment {
                             } else {
                                 Log.d("debug", "Null List");
                             }
-                        }else{
+                        } else {
                             Log.d("debug", "Model NULL");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                        Log.d("homeTv","On Response fail");
+                        Log.d("homeTv", "On Response fail");
                     }
                 });
 
@@ -272,10 +285,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 topRatedBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_selected_background, getContext().getTheme()));
-                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
-                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background,getContext().getTheme()));
+                airingBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
+                popularBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_background, getContext().getTheme()));
 
-                RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+                RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
                     @Override
                     public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -287,7 +300,7 @@ public class HomeFragment extends Fragment {
 
                             if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                                PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
                                 tvRecyclerView.setAdapter(TPRVAdapter);
 
                                 //Create some animation view item loading
@@ -298,31 +311,89 @@ public class HomeFragment extends Fragment {
                             } else {
                                 Log.d("debug", "Null List");
                             }
-                        }else{
+                        } else {
                             Log.d("debug", "Model NULL");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                        Log.d("homeTv","On Response fail");
+                        Log.d("homeTv", "On Response fail");
                     }
                 });
 
             }
         });
 
+        //here drawer layout click
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return false;
+
+                int id = item.getItemId();
+
+                if (id == R.id.nav_share) {
+                    Toast.makeText(getContext(), "share", Toast.LENGTH_SHORT).show();
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT,"Best Movie & TV Show Details App "+
+                            "https://play.google.com/store/apps/details?id=" + getContext().getPackageName());
+                    sendIntent.setType("text/plain");
+
+                    Intent shareIntent = Intent.createChooser(sendIntent, null);
+                    startActivity(shareIntent);
+
+                } else if (id == R.id.nav_rate) {
+                    startReviewFlow();
+                } else if (id == R.id.nav_privacy) {
+
+                    Uri uri = Uri.parse("https://www.themoviedb.org/privacy-policy"); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+
+                } else if (id == R.id.nav_term) {
+
+                    Uri uri = Uri.parse("https://www.themoviedb.org/terms-of-use"); // missing 'http://' will cause crashed
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                } else {
+                    //report problem send
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("plain/text");
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"aman.nittc@gmail.com"});
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
+                    intent.putExtra(Intent.EXTRA_TEXT, "mail body");
+                    startActivity(Intent.createChooser(intent, ""));
+                }
+                return true;
             }
         });
         return view;
     }
 
+    void activateReviewInfo(){
+        manager = ReviewManagerFactory.create(getContext());
+        Task<ReviewInfo> managerInfoTask = manager.requestReviewFlow();
+        managerInfoTask.addOnCompleteListener((task)->{
+            if(task.isSuccessful()){
+                reviewInfo = task.getResult();
+            }else{
+                Toast.makeText(getContext(), "Review failed to start", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    void startReviewFlow(){
+        if(reviewInfo != null){
+            Task<Void>flow =  manager.launchReviewFlow(getActivity(),reviewInfo);
+            flow.addOnCompleteListener(task -> {
+                Toast.makeText(getContext(), "Rating is completed.", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
     private void callFunctionAfterRefresh() {
-        RetrofitInstance.getInstance().apiInterface.getPopularTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+        RetrofitInstance.getInstance().apiInterface.getPopularTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
             @Override
             public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -334,7 +405,7 @@ public class HomeFragment extends Fragment {
 
                     if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
                         tvRecyclerView.setAdapter(TPRVAdapter);
 
                         //Create some animation view item loading
@@ -345,17 +416,17 @@ public class HomeFragment extends Fragment {
                     } else {
                         Log.d("debug", "Null List");
                     }
-                }else{
+                } else {
                     Log.d("debug", "Model NULL");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("homeTv","On Response fail");
+                Log.d("homeTv", "On Response fail");
             }
         });
-        RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+        RetrofitInstance.getInstance().apiInterface.getAiringTodayTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
             @Override
             public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -367,7 +438,7 @@ public class HomeFragment extends Fragment {
 
                     if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
                         tvRecyclerView.setAdapter(TPRVAdapter);
 
                         //Create some animation view item loading
@@ -378,17 +449,17 @@ public class HomeFragment extends Fragment {
                     } else {
                         Log.d("debug", "Null List");
                     }
-                }else{
+                } else {
                     Log.d("debug", "Model NULL");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("homeTv","On Response fail");
+                Log.d("homeTv", "On Response fail");
             }
         });
-        RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api,pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
+        RetrofitInstance.getInstance().apiInterface.getTopRatedTv(api, pageHome).enqueue(new Callback<TrendingPopularTopRatedMovieModel>() {
             @Override
             public void onResponse(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Response<TrendingPopularTopRatedMovieModel> response) {
 
@@ -400,7 +471,7 @@ public class HomeFragment extends Fragment {
 
                     if (TPMovieResultModelList != null && !TPMovieResultModelList.isEmpty()) {
 
-                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(),TPMovieResultModelList);
+                        PopularRatedTVShowRVAdapter TPRVAdapter = new PopularRatedTVShowRVAdapter(getContext(), TPMovieResultModelList);
                         tvRecyclerView.setAdapter(TPRVAdapter);
 
                         //Create some animation view item loading
@@ -411,16 +482,17 @@ public class HomeFragment extends Fragment {
                     } else {
                         Log.d("debug", "Null List");
                     }
-                }else{
+                } else {
                     Log.d("debug", "Model NULL");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TrendingPopularTopRatedMovieModel> call, @NonNull Throwable t) {
-                Log.d("homeTv","On Response fail");
+                Log.d("homeTv", "On Response fail");
             }
         });
 
     }
+
 }

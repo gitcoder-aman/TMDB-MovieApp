@@ -137,7 +137,7 @@ public class PopularRatedTVShowRVAdapter extends RecyclerView.Adapter<PopularRat
 
                 if (holder.favBtn.getText().toString().equals("Watchlist")) {
 
-                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate,"tv"));
 
                     holder.favBtn.setText("Watchlisted");
                     holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
@@ -146,7 +146,7 @@ public class PopularRatedTVShowRVAdapter extends RecyclerView.Adapter<PopularRat
 
                 } else {
                     //remove data from favorite database
-                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate,"tv"));
 
                     holder.favBtn.setText("Watchlist");
                     holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);

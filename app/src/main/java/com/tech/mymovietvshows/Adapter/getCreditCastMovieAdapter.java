@@ -126,14 +126,14 @@ public class getCreditCastMovieAdapter extends RecyclerView.Adapter<getCreditCas
 
                     if (holder.favBtn.getText().toString().equals("Watchlist")) {
 
-                        databaseHelper.movieTVDAO().addTx(new MovieTV(movie_id, posterImage, rating, finalMovieName, finalReleaseDate));
+                        databaseHelper.movieTVDAO().addTx(new MovieTV(movie_id, posterImage, rating, finalMovieName, finalReleaseDate,"movie"));
 
                         holder.favBtn.setText("Watchlisted");
                         holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
 
                     } else {
                         //remove data from favorite database
-                        databaseHelper.movieTVDAO().deleteTx(new MovieTV(movie_id, posterImage, rating, finalMovieName, finalReleaseDate));
+                        databaseHelper.movieTVDAO().deleteTx(new MovieTV(movie_id, posterImage, rating, finalMovieName, finalReleaseDate,"movie"));
 
                         holder.favBtn.setText("Watchlist");
                         holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);

@@ -36,4 +36,14 @@
     <string name="on_tv_">On TV</string>
     <string name="recent_search">Recent Search</string>
     <string name="empty_favorite_list">Empty Favorite List</string>
+    <string name="tmdb_movies_tv_shows"><![CDATA[TMDb Movies & TV Shows]]></string>
+    <string name="term_conditions"><![CDATA[Term & Conditions]]></string>
+    <string name="privacy">Privacy</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="share_app">Share App</string>
+    <string name="report">Report Problem</string>
+    <string name="people">People</string>
+    <string name="favorite">Favorite</string>
+    <string name="home">Home</string>
+    <string name="by_coderaman">by coderAman</string>
 </resources>

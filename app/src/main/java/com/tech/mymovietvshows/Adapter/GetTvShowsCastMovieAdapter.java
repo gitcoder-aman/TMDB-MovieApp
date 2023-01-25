@@ -26,6 +26,7 @@ import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.Model.getCastMovieModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
+import com.tech.mymovietvshows.TvShowsDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,14 +89,14 @@ public class GetTvShowsCastMovieAdapter extends RecyclerView.Adapter<GetTvShowsC
                 @Override
                 public void onClick(View view) {
 
-                    RetrofitInstance.getInstance().apiInterface.getMovieDetailsById(tv_id, api).enqueue(new Callback<MovieDetailModel>() {
+                    RetrofitInstance.getInstance().apiInterface.getTvShowsDetailsById(tv_id, api).enqueue(new Callback<MovieDetailModel>() {
                         @Override
                         public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
                             Log.d("debug", "On Response");
                             MovieDetailModel movieDetailModelResponse = response.body();
 
                             if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
-                                Intent intent = new Intent(context, MovieDetailActivity.class);
+                                Intent intent = new Intent(context, TvShowsDetailActivity.class);
                                 intent.putExtra("id", String.valueOf(tv_id));
                                 context.startActivity(intent);
 
@@ -122,14 +123,14 @@ public class GetTvShowsCastMovieAdapter extends RecyclerView.Adapter<GetTvShowsC
 
                     if (holder.favBtn.getText().toString().equals("Watchlist")) {
 
-                        databaseHelper.movieTVDAO().addTx(new MovieTV(tv_id, posterImage, rating, movieName, releaseDate));
+                        databaseHelper.movieTVDAO().addTx(new MovieTV(tv_id, posterImage, rating, movieName, releaseDate,"tv"));
 
                         holder.favBtn.setText("Watchlisted");
                         holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
 
                     } else {
                         //remove data from favorite database
-                        databaseHelper.movieTVDAO().deleteTx(new MovieTV(tv_id, posterImage, rating, movieName, releaseDate));
+                        databaseHelper.movieTVDAO().deleteTx(new MovieTV(tv_id, posterImage, rating, movieName, releaseDate,"tv"));
 
                         holder.favBtn.setText("Watchlist");
                         holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);

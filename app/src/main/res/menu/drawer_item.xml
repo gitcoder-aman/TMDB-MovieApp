@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_share"
+        android:title="@string/share_app"
+        android:icon="@drawable/ic_share" />
+
+    <item android:id="@+id/nav_rate"
+        android:title="@string/rate_us"
+        android:icon="@drawable/ic_rate"/>
+
+    <item android:id="@+id/nav_privacy"
+        android:title="@string/privacy"
+        android:icon="@drawable/ic_privacy"/>
+
+    <item android:id="@+id/nav_term"
+        android:title="@string/term_conditions"
+        android:icon="@drawable/ic_term"/>
+
+    <item android:id="@+id/nav_report"
+        android:title="@string/report"
+        android:icon="@drawable/ic_report"/>
+</menu>

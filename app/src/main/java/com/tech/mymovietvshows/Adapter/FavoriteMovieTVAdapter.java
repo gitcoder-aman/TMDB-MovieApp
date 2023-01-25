@@ -1,7 +1,6 @@
 package com.tech.mymovietvshows.Adapter;
 
 import static com.tech.mymovietvshows.MainActivity.api;
-import static com.tech.mymovietvshows.MainActivity.lottieFav;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,10 +20,10 @@ import com.squareup.picasso.Picasso;
 import com.tech.mymovietvshows.Client.RetrofitInstance;
 import com.tech.mymovietvshows.Database.DatabaseHelper;
 import com.tech.mymovietvshows.Database.MovieTV;
-import com.tech.mymovietvshows.Fragment.FavoriteFragment;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
+import com.tech.mymovietvshows.TvShowsDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +58,8 @@ public class FavoriteMovieTVAdapter extends RecyclerView.Adapter<FavoriteMovieTV
         String posterImage = movieTV.getPosterImage();
         float rating = movieTV.getRating();
         String releaseDate = movieTV.getReleaseDate();
+        String type = movieTV.getType();
+
         int id = movieTV.getId();
 
         if (movieName != null) {
@@ -76,36 +77,70 @@ public class FavoriteMovieTVAdapter extends RecyclerView.Adapter<FavoriteMovieTV
             holder.releaseDate.setText(releaseDate);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if(movieTV.getType().equals("movie")){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                RetrofitInstance.getInstance().apiInterface.getMovieDetailsById(id, api).enqueue(new Callback<MovieDetailModel>() {
-                    @Override
-                    public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
-                        Log.d("debug", "On Response");
-                        MovieDetailModel movieDetailModelResponse = response.body();
+                    RetrofitInstance.getInstance().apiInterface.getMovieDetailsById(id, api).enqueue(new Callback<MovieDetailModel>() {
+                        @Override
+                        public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
+                            Log.d("debug", "On Response");
+                            MovieDetailModel movieDetailModelResponse = response.body();
 
-                        if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
-                            Intent intent = new Intent(context, MovieDetailActivity.class);
-                            intent.putExtra("id", String.valueOf(id));
-                            context.startActivity(intent);
+                            if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
+                                Intent intent = new Intent(context, MovieDetailActivity.class);
+                                intent.putExtra("id", String.valueOf(id));
+                                context.startActivity(intent);
 
-                        } else {
+                            } else {
 
-                            Log.d("debug", "movie Detail NULL");
-                            Toast.makeText(context, "No any Detail have this Movie", Toast.LENGTH_SHORT).show();
+                                Log.d("debug", "movie Detail NULL");
+                                Toast.makeText(context, "No any Detail have this Movie", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(@NonNull Call<MovieDetailModel> call, @NonNull Throwable t) {
-                        Log.d("debug", "On Response Fail");
-                    }
-                });
+                        @Override
+                        public void onFailure(@NonNull Call<MovieDetailModel> call, @NonNull Throwable t) {
+                            Log.d("debug", "On Response Fail");
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+        }else{
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    RetrofitInstance.getInstance().apiInterface.getTvShowsDetailsById(id, api).enqueue(new Callback<MovieDetailModel>() {
+                        @Override
+                        public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
+                            Log.d("debug", "On Response");
+                            MovieDetailModel movieDetailModelResponse = response.body();
+
+                            if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
+                                Intent intent = new Intent(context, TvShowsDetailActivity.class);
+                                intent.putExtra("id", String.valueOf(id));
+                                context.startActivity(intent);
+
+                            } else {
+
+                                Log.d("debug", "movie Detail NULL");
+                                Toast.makeText(context, "No any Detail have this Movie", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<MovieDetailModel> call, @NonNull Throwable t) {
+                            Log.d("debug", "On Response Fail");
+                        }
+                    });
+
+                }
+            });
+        }
+
 
         DatabaseHelper databaseHelper = DatabaseHelper.getDB(context);
 
@@ -118,14 +153,14 @@ public class FavoriteMovieTVAdapter extends RecyclerView.Adapter<FavoriteMovieTV
 
                 if (holder.favBtn.getText().toString().equals("Watchlist")) {
 
-                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+                    databaseHelper.movieTVDAO().addTx(new MovieTV(id, posterImage, rating, movieName, releaseDate, type));
 
                     holder.favBtn.setText("Watchlisted");
                     holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
 
                 } else {
                     //remove data from favorite database
-                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate));
+                    databaseHelper.movieTVDAO().deleteTx(new MovieTV(id, posterImage, rating, movieName, releaseDate, type));
 
                     holder.favBtn.setText("Watchlist");
                     holder.favBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0);

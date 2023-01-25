@@ -26,14 +26,18 @@ public class MovieTV {
     @ColumnInfo(name = "releaseDate")
     private String releaseDate;
 
+    @ColumnInfo(name = "type")
+    private String type;
+
 
     //main Constructor
-    public MovieTV(int id, String posterImage, float rating, String movieName, String releaseDate) {
+    public MovieTV(int id, String posterImage, float rating, String movieName, String releaseDate,String type) {
         this.id = id;
         this.posterImage = posterImage;
         this.rating = rating;
         this.movieName = movieName;
         this.releaseDate = releaseDate;
+        this.type = type;
     }
 
 //    @Ignore
@@ -43,6 +47,13 @@ public class MovieTV {
 //    }
 
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     public int getId() {
         return id;
     }

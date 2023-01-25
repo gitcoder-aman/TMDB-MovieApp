@@ -22,6 +22,7 @@ import com.tech.mymovietvshows.Model.GetTvShowCrewMovieModel;
 import com.tech.mymovietvshows.Model.MovieDetailModel;
 import com.tech.mymovietvshows.MovieDetailActivity;
 import com.tech.mymovietvshows.R;
+import com.tech.mymovietvshows.TvShowsDetailActivity;
 
 import java.util.List;
 
@@ -63,21 +64,21 @@ public class GetTvShowsCrewMovieAdapter extends RecyclerView.Adapter<GetTvShowsC
             holder.movieName.setText(getTvShowCrewMovieModel.getName());
             holder.releaseDate.setText(getTvShowCrewMovieModel.getFirst_air_date());
 
-            int movie_id = getTvShowCrewMovieModel.getId();
+            int tv_id = getTvShowCrewMovieModel.getId();
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    RetrofitInstance.getInstance().apiInterface.getMovieDetailsById(movie_id, api).enqueue(new Callback<MovieDetailModel>() {
+                    RetrofitInstance.getInstance().apiInterface.getTvShowsDetailsById(tv_id, api).enqueue(new Callback<MovieDetailModel>() {
                         @Override
                         public void onResponse(@NonNull Call<MovieDetailModel> call, @NonNull Response<MovieDetailModel> response) {
                             Log.d("debug", "On Response");
                             MovieDetailModel movieDetailModelResponse = response.body();
 
                             if (movieDetailModelResponse != null && !movieDetailModelResponse.getOverview().equals("")) {
-                                Intent intent = new Intent(context, MovieDetailActivity.class);
-                                intent.putExtra("id", String.valueOf(movie_id));
+                                Intent intent = new Intent(context, TvShowsDetailActivity.class);
+                                intent.putExtra("id", String.valueOf(tv_id));
                                 context.startActivity(intent);
 
                             } else {
